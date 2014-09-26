@@ -33,7 +33,7 @@ However the simple*.glsl shaders do not use the normal.
 Since the same color is created for every vertex of every surface,
 the object is rendered with flat shading.
 
-A reference for estimating fps using glut functions:
+A reference for estimating fps using glut functions:  test
 http://mycodelog.com/2010/04/16/fps/
 
 Mike Barnes
