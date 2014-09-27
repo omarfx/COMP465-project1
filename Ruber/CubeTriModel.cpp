@@ -194,40 +194,45 @@ void intervalTimer (int i) {
   }
 
 void keyboard (unsigned char key, int x, int y) {
-  switch(key) {
-    case 033 : case 'q' :  case 'Q' : exit(EXIT_SUCCESS); break;
-    case 'a' : case 'A' :  // change animation timer
-      // printf("%s   %s\n", timerStr, fpsStr);
-      if (idleTimerFlag) { // switch to interval timer  
-         glutIdleFunc(NULL);
-         strcpy(timerStr, " interval timer");  
-         idleTimerFlag = false;  
-         }         
-      else   {         // switch to idle timer
-         glutIdleFunc(update); 
-         strcpy(timerStr, " idle timer");
-         idleTimerFlag = true;
-         }
-      break;
-    case 'b' : case 'B' :  // bottom view
-      eye = glm::vec3(0.0f, -eyeDistance, eyeDistance);   // camera is below origin on +Z
-      at = glm::vec3(0.0f, 0.0f, 0.0f);                   // looking at origin
-      up = glm::vec3(0.0f, 1.0f, 0.0f);                   // camera'a up vector
-      strcpy(viewStr, " bottom view"); break;
-    case 'f' : case 'F' :  // front view
-      eye = glm::vec3(eyeDistance, 0.0f, eyeDistance);   // camera is to the right and on Z
-      at = glm::vec3(0.0f, 0.0f, 0.0f);                  // looking at origin
-      up = glm::vec3(0.0f, 1.0f, 0.0f);                  // camera'a up vector
-      strcpy(viewStr, " front view"); break;
-    case 't' : case 'T' :  // right view
-      eye = glm::vec3(0.0f, eyeDistance, eyeDistance);     // camera is on Z and above origin
-      at = glm::vec3(0.0f, 0.0f, 0.0f);                    // camera is looking at origin
-      up = glm::vec3(0.0f, 1.0f, 0.0f);                    // camera's up is Y
-      strcpy(viewStr, " top view"); break;
-    case 'w' : case 'W' : // wireframe or surface rendering
-      wireFrame = ! wireFrame; break;
-    }
-  updateTitle();
+	switch(key) {
+
+		case 033 : case 'q' :  case 'Q' : exit(EXIT_SUCCESS); break;
+		case 'a' : case 'A' :  // change animation timer
+		  // printf("%s   %s\n", timerStr, fpsStr);
+		  if (idleTimerFlag) { // switch to interval timer  
+			 glutIdleFunc(NULL);
+			 strcpy(timerStr, " interval timer");  
+			 idleTimerFlag = false;  
+			 }         
+		  else   {         // switch to idle timer
+			 glutIdleFunc(update); 
+			 strcpy(timerStr, " idle timer");
+			 idleTimerFlag = true;
+			 }
+		  break;
+
+		/* -- front camera -- */
+		case 'f' : case 'F' :
+			eye = glm::vec3(0.0f, 100.0f, 200.0f);	// camera slightly above and back
+			at = glm::vec3(0.0f, 0.0f, 0.0f);		// look at origin
+			up = glm::vec3(0.0f, 1.0f, 0.0f);		// up vector Y
+			strcpy(viewStr, " front view"); break;
+
+		/* -- top camera -- */
+		case 't' : case 'T' :
+			eye = glm::vec3(0.0f, 200.0f, 1.0f);	// camera straight above field
+			at = glm::vec3(0.0f, 0.0f, 0.0f);		// look at origin
+			up = glm::vec3(0.0f, 1.0f, 0.0f);		// up vector Y
+			strcpy(viewStr, " top view"); break;
+
+		/* -- wireframe -- */
+		case 'w' : case 'W' :
+		  wireFrame = ! wireFrame; break;
+
+	}
+
+	updateTitle();
+
   }
     
 int main(int argc, char* argv[]) {
