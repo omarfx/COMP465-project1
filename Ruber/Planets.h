@@ -31,6 +31,7 @@ public:
 	Planet(int number) {
 		id = number;  // for debugging
 		
+		//I believe radians var is set corectly but scale and rotation are place holder for now
 		switch (number) { // make model larger
 		case 0: //Ruber
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 20, 20));
@@ -39,18 +40,22 @@ public:
 		case 1: //Unum
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 30, 40));
 			rotationAxis = glm::vec3(0, 1, 0);
+			radians = glm::radians(.004f);
 			break;
 		case 2: //Duo
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(30, 40, 20));
 			rotationAxis = glm::vec3(0, 0, -1);
+			radians = glm::radians(.002f);
 			break;
 		case 3: //Primus
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(40, 20, 30));
 			rotationAxis = glm::vec3(0, 0, -1);
+			radians = glm::radians(.004);
 			break;
 		case 4: //Secundus
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(40, 20, 30));
 			rotationAxis = glm::vec3(0, 0, -1);
+			radians = glm::radians(.002f);
 			break;
 
 
@@ -58,16 +63,7 @@ public:
 			exit(-1); break;
 		}
 		rotationMatrix = glm::mat4();  // no initial orientation
-		//set cube's  rotation axis and rotation radians
-		switch (random % 3) {
-		case 0: rotationAxis = glm::vec3(1, 0, 0); break;
-		case 1: rotationAxis = glm::vec3(0, 1, 0); break;
-		case 2: rotationAxis = glm::vec3(0, 0, -1); break;
-		default: printf("Shape:: randomRotate selection error\n");
-			exit(-1); break;
-		}
-		// rotate between 0.1 and 2.0 degrees
-		radians = glm::radians(0.1f + (random % 20) / 10.0f);
+
 		// random initial placement +/- 500 from origin in X, Y, Z
 		translationMatrix = glm::translate(glm::mat4(),
 			glm::vec3(-500 + rand() % 1000, -500 + rand() % 1000, -500 + rand() % 1000));
