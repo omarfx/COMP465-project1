@@ -4,6 +4,7 @@ viewTriModel.cpp
 
 465 utility include files:  shader465.hpp, triModel465.hpp, glmUtils465.hpp  
 Shaders:  simpleVertex.glsl  amd simpleFragment.glsl
+Added a comment
 
 C OpenGL Core 3.3 example that loads cube.tri model file
 and rotates the cube.
