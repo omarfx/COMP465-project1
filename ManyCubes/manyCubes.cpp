@@ -139,7 +139,7 @@ void init (void) {
   glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 
   // create shape
-  for(int i = 0; i < nShapes; i++) shape[i] = new Shape3D(i);
+  for(int i = 0; i < 5; i++) shape[i] = new Shape3D(i);
   printf("%d Shapes created \n", nShapes);
 
   lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
