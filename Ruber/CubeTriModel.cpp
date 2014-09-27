@@ -193,47 +193,76 @@ void intervalTimer (int i) {
   if (! idleTimerFlag) update();  // fixed interval timer
   }
 
+// current camera view
+int curView = 0;
+
+// listens for keyboard clicks
 void keyboard (unsigned char key, int x, int y) {
 	switch(key) {
 
-		case 033 : case 'q' :  case 'Q' : exit(EXIT_SUCCESS); break;
-		case 'a' : case 'A' :  // change animation timer
-		  // printf("%s   %s\n", timerStr, fpsStr);
-		  if (idleTimerFlag) { // switch to interval timer  
-			 glutIdleFunc(NULL);
-			 strcpy(timerStr, " interval timer");  
-			 idleTimerFlag = false;  
-			 }         
-		  else   {         // switch to idle timer
-			 glutIdleFunc(update); 
-			 strcpy(timerStr, " idle timer");
-			 idleTimerFlag = true;
-			 }
-		  break;
+		/* -- quit -- */
+		case 033 : case 'q' :  case 'Q' :
 
-		/* -- front camera -- */
-		case 'f' : case 'F' :
-			eye = glm::vec3(0.0f, 100.0f, 200.0f);	// camera slightly above and back
-			at = glm::vec3(0.0f, 0.0f, 0.0f);		// look at origin
-			up = glm::vec3(0.0f, 1.0f, 0.0f);		// up vector Y
-			strcpy(viewStr, " front view"); break;
+			exit(EXIT_SUCCESS);
+			break;
 
-		/* -- top camera -- */
-		case 't' : case 'T' :
-			eye = glm::vec3(0.0f, 200.0f, 1.0f);	// camera straight above field
-			at = glm::vec3(0.0f, 0.0f, 0.0f);		// look at origin
-			up = glm::vec3(0.0f, 1.0f, 0.0f);		// up vector Y
-			strcpy(viewStr, " top view"); break;
+		/* -- change view -- */
+		case 'v': case 'V':
 
-		/* -- wireframe -- */
-		case 'w' : case 'W' :
-		  wireFrame = ! wireFrame; break;
+			/* -- evaluate view -- */
+			curView = (curView + 1) % 4;
+
+			/* -- front camera -- */
+			if (curView == 0) {
+				eye = glm::vec3(0.0f, 10000.0f, 20000.0f);	// camera slightly above and back
+				at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
+				up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+				strcpy(viewStr, " Front View");
+				break;
+			}
+
+			/* -- top camera -- */
+			else if (curView == 1) {
+				eye = glm::vec3(0.0f, 20000.0f, 1.0f);		// camera straight above field
+				at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
+				up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+				strcpy(viewStr, " Top View");
+				break;
+			}
+
+			/* -- unum camera -- */
+			else if (curView == 2) {
+				eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera slightly above and back
+				at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at unum ** NEEDS UPDATING **
+				up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+				strcpy(viewStr, " Unum View");
+				break;
+			}
+
+			/* -- duo camera -- */
+			else if (curView == 3) {
+				eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera straight above field
+				at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at duo ** NEEDS UPDATING **
+				up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+				strcpy(viewStr, " Duo View");
+				break;
+			}
+
+			// /* -- ship camera -- */
+			// else if (curView == 4) {
+			// 
+			// }
+			//
+			// /* -- ship camera -- */
+			// else if (curView == 5) {
+			// 
+			// }
+
+			/* update title on page base on view */
+			updateTitle();
 
 	}
-
-	updateTitle();
-
-  }
+}
     
 int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
