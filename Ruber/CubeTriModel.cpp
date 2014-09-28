@@ -203,19 +203,14 @@ int curView = 0;
 /* listens for keyboard clicks */
 void keyboard (unsigned char key, int x, int y) {
 	switch(key) {
-
 		/* -- quit -- */
 		case 033 : case 'q' :  case 'Q' :
-
 			exit(EXIT_SUCCESS);
 			break;
-
 		/* -- change view -- */
 		case 'v': case 'V':
-
 			/* -- evaluate view -- */
 			curView = (curView + 1) % 4;
-
 			/* -- front camera -- */
 			if (curView == 0) {
 				eye = glm::vec3(0.0f, 10000.0f, 20000.0f);	// camera slightly above and back
@@ -224,7 +219,6 @@ void keyboard (unsigned char key, int x, int y) {
 				strcpy(viewStr, " Front View");
 				break;
 			}
-
 			/* -- top camera -- */
 			else if (curView == 1) {
 				eye = glm::vec3(0.0f, 20000.0f, 1.0f);		// camera straight above field
@@ -233,7 +227,6 @@ void keyboard (unsigned char key, int x, int y) {
 				strcpy(viewStr, " Top View");
 				break;
 			}
-
 			/* -- unum camera -- */
 			else if (curView == 2) {
 				eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera slightly above and back
@@ -242,7 +235,6 @@ void keyboard (unsigned char key, int x, int y) {
 				strcpy(viewStr, " Unum View");
 				break;
 			}
-
 			/* -- duo camera -- */
 			else if (curView == 3) {
 				eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera straight above field
@@ -251,20 +243,8 @@ void keyboard (unsigned char key, int x, int y) {
 				strcpy(viewStr, " Duo View");
 				break;
 			}
-
-			// /* -- ship camera -- */
-			// else if (curView == 4) {
-			// 
-			// }
-			//
-			// /* -- ship camera -- */
-			// else if (curView == 5) {
-			// 
-			// }
-
 			/* update title on page base on view */
 			updateTitle();
-
 	}
 }
     

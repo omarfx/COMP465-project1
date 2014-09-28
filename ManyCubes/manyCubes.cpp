@@ -190,29 +190,57 @@ void update (int i) {
   for(int i = 0; i < nShapes; i++) shape[i] -> update();  
   }
 
+/* current camera view */
+int curView = 0;
+
 // Quit or set the view
 void keyboard (unsigned char key, int x, int y) {
-  switch(key) {
-    case 033 : case 'q' :  case 'Q' : exit(EXIT_SUCCESS); break;
-    case 'f' : case 'F' :  // front view
-        eye = glm::vec3(0.0f, 0.0f, 2000.0f);   // eye is 2000 "out of screen" from origin
-        at  = glm::vec3(0.0f, 0.0f,    0.0f);   // looking at origin
-        up  = glm::vec3(0.0f, 1.0f,    0.0f);   // camera'a up vector
-        strcpy(viewStr, " front view"); break;
-    case 'r' : case 'R' :  // bottom view
-        eye = glm::vec3(1000.0f, 0.0f, 0.0f);   // eye is 1000 right from origin
-        at  = glm::vec3(   0.0f, 0.0f, 0.0f);   // looking at origin
-        up  = glm::vec3(   0.0f, 1.0f, 0.0f);   // camera'a up vector
-        strcpy(viewStr, " right view"); break;
-    case 't' : case 'T' :  // top view
-        eye = glm::vec3(0.0f, 3000.0f,  0.0f);   // eye is 3000 up from origin
-        at  = glm::vec3(0.0f,    0.0f,  0.0f);   // looking at origin  
-        up  = glm::vec3(0.0f,    0.0f, -1.0f);   // camera's up is looking towards -Z vector
-        strcpy(viewStr, " top view"); break;
-    }
-  viewMatrix = glm::lookAt(eye, at, up);
-  updateTitle();
-  }
+	switch (key) {
+		/* -- quit -- */
+	case 033: case 'q':  case 'Q':
+		exit(EXIT_SUCCESS);
+		break;
+		/* -- change view -- */
+	case 'v': case 'V':
+		/* -- evaluate view -- */
+		curView = (curView + 1) % 4;
+		/* -- front camera -- */
+		if (curView == 0) {
+			eye = glm::vec3(0.0f, 10000.0f, 20000.0f);	// camera slightly above and back
+			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
+			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+			strcpy(viewStr, " Front View");
+			break;
+		}
+		/* -- top camera -- */
+		else if (curView == 1) {
+			eye = glm::vec3(0.0f, 20000.0f, 1.0f);		// camera straight above field
+			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
+			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+			strcpy(viewStr, " Top View");
+			break;
+		}
+		/* -- unum camera -- */
+		else if (curView == 2) {
+			eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera slightly above and back
+			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at unum ** NEEDS UPDATING **
+			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+			strcpy(viewStr, " Unum View");
+			break;
+		}
+		/* -- duo camera -- */
+		else if (curView == 3) {
+			eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera straight above field
+			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at duo ** NEEDS UPDATING **
+			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+			strcpy(viewStr, " Duo View");
+			break;
+		}
+	}
+	viewMatrix = glm::lookAt(eye, at, up);
+	/* update title on page base on view */
+	updateTitle();
+}
     
 int main(int argc, char* argv[]) {
   glutInit(&argc, argv);
