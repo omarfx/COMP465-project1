@@ -39,14 +39,14 @@ public:
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 20, 20));
 			rotationAxis = glm::vec3(1, 0, 0);
 			translationMatrix = glm::translate(glm::mat4(),
-			glm::vec3(0, 0, 0));
+				glm::vec3(0, 0, 0));
 			break; 
 		case 1: //Unum
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 30, 40)); //size
 			rotationAxis = glm::vec3(0, 1, 0); //orbit
 			radians = glm::radians(.004f); //spin
 			translationMatrix = glm::translate(glm::mat4(), //part of the next line down
-			glm::vec3(4000, 0, 0)); //position (x,y,z)
+				glm::vec3(4000, 0, 0)); //position (x,y,z)
 			break;
 		case 2: //Duo
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(30, 40, 20));
