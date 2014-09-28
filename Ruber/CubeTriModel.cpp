@@ -50,8 +50,8 @@ int Index =  0;  // global variable indexing into VBO arrays
 bool perspective = true;
 GLfloat aspectRatio;
 // window title strings
-char baseStr[50] =    "465 ViewTriModel Example {a, w, f, t, b} : ";
-char viewStr[15] =    " front view";
+char baseStr[50] =    "Project Ruber - Phase 1 {v, q} : ";
+char viewStr[15] =    " Front View";
 char fpsStr[15], timerStr[20] = " interval timer";
 char titleStr [100]; 
 
@@ -127,9 +127,9 @@ void init (void) {
   
   eyeDistance = eyeDistanceMultiplier * boundingRadius;
   // initially use a front view
-  eye = glm::vec3(0.0f, 0.0f,  eyeDistance);   // camera's position
-  at = glm::vec3(0.0f, 0.0f, 0.0f);            // position camera is looking at
-  up = glm::vec3(0.0f, 1.0f, 0.0f);            // camera'a up vector
+  eye = glm::vec3(0.0f, 10000.0f, 20000.0f);	// camera slightly above and back
+  at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
+  up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
 
 
   // set render state values
@@ -197,10 +197,10 @@ void intervalTimer (int i) {
   if (! idleTimerFlag) update();  // fixed interval timer
   }
 
-// current camera view
+/* current camera view */
 int curView = 0;
 
-// listens for keyboard clicks
+/* listens for keyboard clicks */
 void keyboard (unsigned char key, int x, int y) {
 	switch(key) {
 
@@ -274,7 +274,7 @@ int main(int argc, char* argv[]) {
   glutInitWindowSize(800, 600);
   glutInitContextVersion(3, 3);
   glutInitContextProfile(GLUT_CORE_PROFILE);
-  glutCreateWindow("465 CubeTriModel Example {a, o, p, w, f, t, b} : perspective front view");
+  glutCreateWindow("Project Ruber - Phase 1 {v, q} : Front View");
   // initialize and verify glew
   glewExperimental = GL_TRUE;  // needed my home system 
   GLenum err = glewInit();  
