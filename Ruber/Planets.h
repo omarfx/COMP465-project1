@@ -31,42 +31,48 @@ public:
 	Planet(int number) {
 		id = number;  // for debugging
 		
-		//I believe radians var is set corectly but scale and rotation are place holder for now
+		rotationMatrix = glm::mat4();
+
+		//I believe radians var and translation matrix are set corectly but scale and rotation are place holder for now
 		switch (number) { // make model larger
 		case 0: //Ruber
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 20, 20));
 			rotationAxis = glm::vec3(1, 0, 0);
+			translationMatrix = glm::translate(glm::mat4(),
+			glm::vec3(0, 0, 0));
 			break; 
 		case 1: //Unum
-			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 30, 40));
-			rotationAxis = glm::vec3(0, 1, 0);
-			radians = glm::radians(.004f);
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 30, 40)); //size
+			rotationAxis = glm::vec3(0, 1, 0); //orbit
+			radians = glm::radians(.004f); //spin
+			translationMatrix = glm::translate(glm::mat4(), //part of the next line down
+			glm::vec3(4000, 0, 0)); //position (x,y,z)
 			break;
 		case 2: //Duo
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(30, 40, 20));
 			rotationAxis = glm::vec3(0, 0, -1);
 			radians = glm::radians(.002f);
+			translationMatrix = glm::translate(glm::mat4(),
+				glm::vec3(-9000, 0, 0));
 			break;
 		case 3: //Primus
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(40, 20, 30));
 			rotationAxis = glm::vec3(0, 0, -1);
 			radians = glm::radians(.004);
+			translationMatrix = glm::translate(glm::mat4(),
+				glm::vec3(-8100, 0, 0));
 			break;
 		case 4: //Secundus
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(40, 20, 30));
 			rotationAxis = glm::vec3(0, 0, -1);
 			radians = glm::radians(.002f);
+			translationMatrix = glm::translate(glm::mat4(),
+				glm::vec3(-7250, 0, 0));
 			break;
-
-
-		default: printf("Shape:: randomRotate selection error\n");
+		default: printf("Planet:: selection error\n");
 			exit(-1); break;
 		}
-		rotationMatrix = glm::mat4();  // no initial orientation
 
-		// random initial placement +/- 500 from origin in X, Y, Z
-		translationMatrix = glm::translate(glm::mat4(),
-			glm::vec3(-500 + rand() % 1000, -500 + rand() % 1000, -500 + rand() % 1000));
 		// determine rotation type
 		if (random % 2 == 0)
 			orbital = true;
