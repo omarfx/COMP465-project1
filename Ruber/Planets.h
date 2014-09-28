@@ -32,10 +32,28 @@ public:
 		id = number;  // for debugging
 		
 		switch (number) { // make model larger
-		case 0: scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 20, 20));  break;
-		case 1: scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 30, 40));  break;
-		case 2: scaleMatrix = glm::scale(glm::mat4(), glm::vec3(30, 40, 20));  break;
-		case 3: scaleMatrix = glm::scale(glm::mat4(), glm::vec3(40, 20, 30));  break;
+		case 0: //Ruber
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 20, 20));
+			rotationAxis = glm::vec3(1, 0, 0);
+			break; 
+		case 1: //Unum
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(20, 30, 40));
+			rotationAxis = glm::vec3(0, 1, 0);
+			break;
+		case 2: //Duo
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(30, 40, 20));
+			rotationAxis = glm::vec3(0, 0, -1);
+			break;
+		case 3: //Primus
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(40, 20, 30));
+			rotationAxis = glm::vec3(0, 0, -1);
+			break;
+		case 4: //Secundus
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(40, 20, 30));
+			rotationAxis = glm::vec3(0, 0, -1);
+			break;
+
+
 		default: printf("Shape:: randomRotate selection error\n");
 			exit(-1); break;
 		}
