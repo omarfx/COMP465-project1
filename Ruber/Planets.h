@@ -75,9 +75,9 @@ public:
 
 		// determine rotation type
 		//if (random % 2 == 0)
-			orbital = true;
+			//orbital = true;
 		//else
-			//orbital = false;
+			orbital = false;
 	}
 
 	glm::mat4 getModelMatrix() {
