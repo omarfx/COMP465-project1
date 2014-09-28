@@ -38,6 +38,10 @@ Mike Barnes
 # define __Windows__ // define your target operating system
 # include "../includes465/include465.hpp"
 
+# include "Planets.hpp"
+
+Planets sun;
+
 char * modelFile =  "cube.tri";  // "obelisk-10-20-10.tri"; // name of tri model file
 const GLuint nVertices = 12 * 3;       // 14 * 3; //  3 vertices per line of model file  
 float boundingRadius;  // modelFile's bounding radius

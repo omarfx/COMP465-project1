@@ -47,7 +47,7 @@ Mike Barnes
 # include "Shape3D.hpp"
 
 // Shapes
-const int nShapes = 1000;
+const int nShapes = 5;
 Shape3D * shape[nShapes];
 // Model for shapes
 char * modelFile = "cube-1-1-1.tri"; // name of tri model file
@@ -139,7 +139,7 @@ void init (void) {
   glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 
   // create shape
-  for(int i = 0; i < 5; i++) shape[i] = new Shape3D(i);
+  for(int i = 0; i < nShapes; i++) shape[i] = new Shape3D(i);
   printf("%d Shapes created \n", nShapes);
 
   lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
