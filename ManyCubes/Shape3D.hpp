@@ -20,10 +20,12 @@ private:
 
 	int id;
 	glm::mat4 rotationMatrix;
-	glm::mat4 scaleMatrix;
-	glm::mat4 translationMatrix;
-	glm::vec3 rotationAxis;
-	float radians;
+	glm::mat4 scaleMatrix; //size
+	glm::mat4 translationMatrix;//position (x,y,z)
+	glm::mat4 translate; //where to move to
+	glm::vec3 rotationAxis = glm::vec3(0, 1, 0);; //spin axis
+	glm::vec3 orbitAxis; //may be unnessesary
+	float radians; //spin rate
 	bool orbital;
 
 public:
@@ -36,39 +38,34 @@ public:
 		//I believe radians var and translation matrix are set corectly but scale and rotation are place holder for now
 		switch (number) { // make model larger
 		case 0: //Ruber
-			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(200, 200, 200));
-			rotationAxis = glm::vec3(1, 0, 0);
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(2000, 2000, 2000));
 			radians = glm::radians(0.0f);
 			translationMatrix = glm::translate(glm::mat4(),
 				glm::vec3(0, 0, 0));
 			break; 
 		case 1: //Unum
-			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(100, 100, 100)); //size
-			rotationAxis = glm::vec3(0, 1, 0); //orbit
-			radians = glm::radians(.004f); //spin
-			translationMatrix = glm::translate(glm::mat4(), //part of the next line down
-				glm::vec3(400, 0, 0)); //position (x,y,z)
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(200, 200, 200));
+			radians = glm::radians(.004f);
+			translationMatrix = glm::translate(glm::mat4(),
+				glm::vec3(4000, 0, 0));
 			break;
 		case 2: //Duo
-			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(100, 100, 100));
-			rotationAxis = glm::vec3(0, 1, 0);
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(400, 400, 400));
 			radians = glm::radians(.002f);
 			translationMatrix = glm::translate(glm::mat4(),
-				glm::vec3(-900, 0, 0));
+				glm::vec3(-9000, 0, 0));
 			break;
 		case 3: //Primus
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(100, 100, 100));
-			rotationAxis = glm::vec3(0, 1, 0);
 			radians = glm::radians(.004f);
 			translationMatrix = glm::translate(glm::mat4(),
-				glm::vec3(-810, 0, 0));
+				glm::vec3(-8100, 0, 0));
 			break;
 		case 4: //Secundus
-			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(100, 100, 100));
-			rotationAxis = glm::vec3(0, 1, 0);
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(150, 150, 150));
 			radians = glm::radians(.002f);
 			translationMatrix = glm::translate(glm::mat4(),
-				glm::vec3(-725, 0, 0));
+				glm::vec3(-7250, 0, 0));
 			break;
 		default: printf("Planet:: selection error\n");
 			exit(-1); break;
