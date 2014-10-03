@@ -172,15 +172,10 @@ void display(void) {
     glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix)); 
     glDrawArrays(GL_TRIANGLES, 0, nVertices);
     }
-  //prlim code to support updating the camera position
+
   modelMatrix = shape[0]->getModelMatrix();
   xPosition = modelMatrix[0][3];
   printf("%d",xPosition);
-
-  eye = glm::vec3(0.0f, 10000.0f, 20000.0f);	// camera slightly above and back
-  at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
-  up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
-  strcpy(viewStr, " Front View");
 
   glutSwapBuffers();
 
@@ -218,7 +213,6 @@ void keyboard (unsigned char key, int x, int y) {
 	case 'v': case 'V':
 		/* -- evaluate view -- */
 		curView = (curView + 1) % 4;
-		break;
 		/* -- front camera -- */
 		if (curView == 0) {
 			eye = glm::vec3(0.0f, 10000.0f, 20000.0f);	// camera slightly above and back
@@ -247,7 +241,7 @@ void keyboard (unsigned char key, int x, int y) {
 		else if (curView == 3) {
 			eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera straight above field
 			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at duo ** NEEDS UPDATING **
-			up = glm::vec3(0.0f, 0.0f, 1.0f);			// up vector Y
+			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
 			strcpy(viewStr, " Duo View");
 			break;
 		}
