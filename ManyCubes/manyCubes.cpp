@@ -171,7 +171,7 @@ void updateTitle() {
 void camUpdate(void){
 
 	float xPosition;
-	float yPosition;
+	double yPosition;
 	float zPosition;
 	float atX;
 	float atY;
@@ -185,23 +185,22 @@ void camUpdate(void){
 	if (curView == 0){
 		xPosition = 0;
 		yPosition = 4000;
-		zPosition = 0;
+		zPosition = 4000;
 		atX = 0.0f;
 		atY = 0.0f;
 		atZ = 0.0f;
 		upX = 0.0;
 		upY = 1.0;
-		upZ = 0.0;
+		upZ = -1.0;
 		strcpy(viewStr, " Front View");
 	}
 	else if (curView == 1){
-		tempTransMatrix = shape[0]->getTransMatrix();
-		xPosition = tempTransMatrix[3][0];
-		yPosition = 4100;
+		xPosition = 0;
+		yPosition = 10951;
 		zPosition = 0;
-		atX = tempTransMatrix[3][0];
-		atY = tempTransMatrix[3][1];
-		atZ = tempTransMatrix[3][2];
+		atX = 0;
+		atY = 0;
+		atZ = 0;
 		upX = 0.0;
 		upY = 0.0;
 		upZ = 1.0;
