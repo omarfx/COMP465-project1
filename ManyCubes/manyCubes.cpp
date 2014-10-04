@@ -51,7 +51,7 @@ const int nShapes = 5;
 Shape3D * shape[nShapes];
 // Model for shapes
 char * modelFile = "cube-1-1-1.tri"; // name of tri model file
-const GLuint nVertices = 12 * 3;  // 3 vertices per line (surface) of model file  
+const GLuint nVertices = 480 * 3;  // 3 vertices per line (surface) of model file  
 float boundingRadius;  // modelFile's bounding radius
 int Index =  0;  // global variable indexing into VBO arrays
 
@@ -160,6 +160,9 @@ void updateTitle() {
   }
 
 void display(void) {
+
+	int xPosition;
+
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // update model matrix, set MVP, draw
@@ -169,7 +172,13 @@ void display(void) {
     glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix)); 
     glDrawArrays(GL_TRIANGLES, 0, nVertices);
     }
+
+  modelMatrix = shape[0]->getModelMatrix();
+  xPosition = modelMatrix[0][3];
+  printf("%d",xPosition);
+
   glutSwapBuffers();
+
   frameCount++;
   // see if a second has passed to set estimated fps information
   currentTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
