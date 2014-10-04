@@ -39,7 +39,7 @@ public:
 		switch (number) { // make model larger
 		case 0: //Ruber
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(2000, 2000, 2000));
-			radians = glm::radians(0.0f);
+			radians = glm::radians(3.0f);
 			translationMatrix = glm::translate(glm::mat4(),
 				glm::vec3(0, 0, 0));
 			break; 
@@ -76,6 +76,10 @@ public:
 			//orbital = true;
 		//else
 			orbital = false;
+	}
+
+	glm::mat4 getTransMatrix() {
+		return translationMatrix;
 	}
 
 	glm::mat4 getModelMatrix() {

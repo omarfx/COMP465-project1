@@ -53,7 +53,16 @@ Shape3D * shape[nShapes];
 char * modelFile = "cube-1-1-1.tri"; // name of tri model file
 const GLuint nVertices = 480 * 3;  // 3 vertices per line (surface) of model file  
 float boundingRadius;  // modelFile's bounding radius
-int Index =  0;  // global variable indexing into VBO arrays
+int Index =  0;  // global variable indexing into VBO arrays
+//Camera constants
+float frontX = 0;
+float frontY = 10000;
+float frontZ = 20000;
+float topX = 0;
+float topY = 20000;
+float topZ = 0;
+/* current camera view */
+int curView = 0;
 
 // display state and "state strings" for title display
 // window title strings
@@ -161,7 +170,13 @@ void updateTitle() {
 
 void display(void) {
 
-	int xPosition;
+	float xPosition;
+	float yPosition;
+	float zPosition;
+	float atX;
+	float atY;
+	float atZ;
+	glm::mat4 tempTransMatrix;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -172,15 +187,53 @@ void display(void) {
     glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix)); 
     glDrawArrays(GL_TRIANGLES, 0, nVertices);
     }
-  //prlim code to support updating the camera position
-  modelMatrix = shape[0]->getModelMatrix();
-  xPosition = modelMatrix[0][3];
-  printf("%d",xPosition);
 
-  eye = glm::vec3(0.0f, 10000.0f, 20000.0f);	// camera slightly above and back
-  at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
-  up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
-  strcpy(viewStr, " Front View");
+  //prlim code to support updating the camera position
+	if (curView == 0){
+		xPosition = frontX;
+		yPosition = frontY;
+		zPosition = frontZ;
+		atX = 0.0f;
+		atY = 0.0f;
+		atZ = 0.0f;
+		strcpy(viewStr, " Front View");
+	}
+	else if (curView == 1){
+		xPosition = topX;
+		yPosition = topY;
+		zPosition = topZ;
+		atX = 0.0f;
+		atY = 0.0f;
+		atZ = 0.0f;
+		strcpy(viewStr, " Top View");
+	}
+	else if (curView == 2){
+		tempTransMatrix = shape[1]->getTransMatrix();
+		xPosition = 0;
+		yPosition = 4000;
+		zPosition = 0;
+		atX = tempTransMatrix[3][0];
+		atY = tempTransMatrix[3][1];
+		atZ = tempTransMatrix[3][2];
+		strcpy(viewStr, " Unum View");
+	}
+	else {
+		tempTransMatrix = shape[2]->getTransMatrix();
+		xPosition = 0;
+		yPosition = 4000;
+		zPosition = 0;
+		atX = tempTransMatrix[3][0];
+		atY = tempTransMatrix[3][1];
+		atZ = tempTransMatrix[3][2];
+		strcpy(viewStr, " Duo View");
+	}
+
+	eye = glm::vec3(xPosition, yPosition, zPosition);	// camera slightly above and back
+	at = glm::vec3(atX, atY, atZ);			// look at origin
+	up = glm::vec3(0.0f, 0.0f, 1.0f);			// up vector Y
+
+
+	viewMatrix = glm::lookAt(eye, at, up);
 
   glutSwapBuffers();
 
@@ -204,11 +257,9 @@ void update (int i) {
   for(int i = 0; i < nShapes; i++) shape[i] -> update();  
   }
 
-/* current camera view */
-int curView = 0;
-
 // Quit or set the view
-void keyboard (unsigned char key, int x, int y) {
+void keyboard(unsigned char key, int x, int y) {
+	glm::mat4 tempTransMatrix;
 	switch (key) {
 		/* -- quit -- */
 	case 033: case 'q':  case 'Q':
@@ -219,42 +270,10 @@ void keyboard (unsigned char key, int x, int y) {
 		/* -- evaluate view -- */
 		curView = (curView + 1) % 4;
 		break;
-		/* -- front camera -- */
-		if (curView == 0) {
-			eye = glm::vec3(0.0f, 10000.0f, 20000.0f);	// camera slightly above and back
-			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
-			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
-			strcpy(viewStr, " Front View");
-			break;
-		}
-		/* -- top camera -- */
-		else if (curView == 1) {
-			eye = glm::vec3(0.0f, 20000.0f, 1.0f);		// camera straight above field
-			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
-			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
-			strcpy(viewStr, " Top View");
-			break;
-		}
-		/* -- unum camera -- */
-		else if (curView == 2) {
-			eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera slightly above and back
-			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at unum ** NEEDS UPDATING **
-			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
-			strcpy(viewStr, " Unum View");
-			break;
-		}
-		/* -- duo camera -- */
-		else if (curView == 3) {
-			eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera straight above field
-			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at duo ** NEEDS UPDATING **
-			up = glm::vec3(0.0f, 0.0f, 1.0f);			// up vector Y
-			strcpy(viewStr, " Duo View");
-			break;
-		}
 	}
-	viewMatrix = glm::lookAt(eye, at, up);
 	/* update title on page base on view */
 	updateTitle();
+
 }
     
 int main(int argc, char* argv[]) {
