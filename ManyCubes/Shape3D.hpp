@@ -38,34 +38,41 @@ public:
 		//I believe radians var and translation matrix are set corectly but scale and rotation are place holder for now
 		switch (number) { // make model larger
 		case 0: //Ruber
-			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(2000, 2000, 2000));
-			radians = glm::radians(3.0f);
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(1000, 1000, 1000));
+			radians = glm::radians(0.0f);
 			translationMatrix = glm::translate(glm::mat4(),
 				glm::vec3(0, 0, 0));
+			orbital = false;
 			break; 
 		case 1: //Unum
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(200, 200, 200));
 			radians = glm::radians(5.0f);
 			translationMatrix = glm::translate(glm::mat4(),
-				glm::vec3(4000, 0, 0));
+				//glm::vec3(4000, 0, 0));
+				glm::vec3(1500, 0, 0)); /* chris debugging */
+			orbital = true;
 			break;
 		case 2: //Duo
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(400, 400, 400));
 			radians = glm::radians(3.0f);
 			translationMatrix = glm::translate(glm::mat4(),
-				glm::vec3(-9000, 0, 0));
+				//glm::vec3(-9000, 0, 0));
+				glm::vec3(-3500, 0, 0)); /* chris debugging */
+			orbital = true;
 			break;
 		case 3: //Primus
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(100, 100, 100));
 			radians = glm::radians(.004f);
 			translationMatrix = glm::translate(glm::mat4(),
 				glm::vec3(-8100, 0, 0));
+			orbital = true;
 			break;
 		case 4: //Secundus
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(150, 150, 150));
 			radians = glm::radians(.002f);
 			translationMatrix = glm::translate(glm::mat4(),
 				glm::vec3(-7250, 0, 0));
+			orbital = true;
 			break;
 		default: printf("Planet:: selection error\n");
 			exit(-1); break;
@@ -75,7 +82,7 @@ public:
 		//if (random % 2 == 0)
 			//orbital = true;
 		//else
-			orbital = false;
+			//orbital = false;
 	}
 
 	glm::mat4 getTransMatrix() {
@@ -91,6 +98,6 @@ public:
 
 	void update() {
 		rotationMatrix = glm::rotate(rotationMatrix, radians, rotationAxis);
-		//translationMatrix = glm::translate(translationMatrix, translation);
+		// translationMatrix = glm::translate(translationMatrix, translation);
 	}
 };

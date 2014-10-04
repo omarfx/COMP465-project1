@@ -161,12 +161,12 @@ void reshape(int width, int height) {
 
 // update and display animation state in window title
 void updateTitle() {
-  strcpy(titleStr, baseStr);
-  strcat(titleStr, viewStr);
-  strcat(titleStr, fpsStr);
-  // printf("title string = %s \n", titleStr);
-  glutSetWindowTitle( titleStr);
-  }
+	strcpy(titleStr, baseStr);
+	strcat(titleStr, viewStr);
+	strcat(titleStr, fpsStr);
+	// printf("title string = %s \n", titleStr);
+	glutSetWindowTitle(titleStr);
+}
 
 void camUpdate(void){
 
@@ -196,7 +196,8 @@ void camUpdate(void){
 	}
 	else if (curView == 1){
 		xPosition = 0;
-		yPosition = 10951;
+		//yPosition = 10951;
+		yPosition = 10000; /* chris debugging */
 		zPosition = 0;
 		atX = 0;
 		atY = 0;
@@ -237,38 +238,37 @@ void camUpdate(void){
 	at = glm::vec3(atX, atY, atZ);
 	up = glm::vec3(upX, upY, upZ);
 
-
 	viewMatrix = glm::lookAt(eye, at, up);
+
 }
 
 void display(void) {
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // update model matrix, set MVP, draw
-  for(int i = 0; i < nShapes; i++) { 
-    modelMatrix = shape[i]->getModelMatrix(); 
-    ModelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix; 
-    glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix)); 
-    glDrawArrays(GL_TRIANGLES, 0, nVertices);
+	// update model matrix, set MVP, draw
+	for(int i = 0; i < nShapes; i++) { 
+		modelMatrix = shape[i]->getModelMatrix(); 
+		ModelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix; 
+		glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix)); 
+		glDrawArrays(GL_TRIANGLES, 0, nVertices);
     }
 
-  camUpdate();
+	camUpdate();
 
-  glutSwapBuffers();
+	glutSwapBuffers();
 
-  frameCount++;
-  // see if a second has passed to set estimated fps information
-  currentTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
-  timeInterval = currentTime - lastTime;
-  if ( timeInterval >= 1000) {
-    sprintf(fpsStr, " fps %4d", (int) (frameCount / (timeInterval / 1000.0f)) );
-    lastTime = currentTime;
-    frameCount = 0;
-    updateTitle();
-    }
-  }
-
+	frameCount++;
+	// see if a second has passed to set estimated fps information
+	currentTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
+	timeInterval = currentTime - lastTime;
+	if ( timeInterval >= 1000) {
+		sprintf(fpsStr, " fps %4d", (int) (frameCount / (timeInterval / 1000.0f)) );
+		lastTime = currentTime;
+		frameCount = 0;
+		updateTitle();
+	}
+}
 
 // Animate scene objects by updating their transformation matrices
 // timerDelay = 40, or 25 updates / second
