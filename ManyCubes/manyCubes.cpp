@@ -188,6 +188,7 @@ void display(void) {
     glDrawArrays(GL_TRIANGLES, 0, nVertices);
     }
 
+<<<<<<< HEAD
   //prlim code to support updating the camera position
 	if (curView == 0){
 		xPosition = frontX;
@@ -235,6 +236,12 @@ void display(void) {
 
 	viewMatrix = glm::lookAt(eye, at, up);
 
+=======
+  modelMatrix = shape[0]->getModelMatrix();
+  xPosition = modelMatrix[0][3];
+  printf("%d",xPosition);
+
+>>>>>>> cd979d7474ebe2e7a97dbf15c2b1d9ec90718e38
   glutSwapBuffers();
 
   frameCount++;
@@ -269,7 +276,42 @@ void keyboard(unsigned char key, int x, int y) {
 	case 'v': case 'V':
 		/* -- evaluate view -- */
 		curView = (curView + 1) % 4;
+<<<<<<< HEAD
 		break;
+=======
+		/* -- front camera -- */
+		if (curView == 0) {
+			eye = glm::vec3(0.0f, 10000.0f, 20000.0f);	// camera slightly above and back
+			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
+			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+			strcpy(viewStr, " Front View");
+			break;
+		}
+		/* -- top camera -- */
+		else if (curView == 1) {
+			eye = glm::vec3(0.0f, 20000.0f, 1.0f);		// camera straight above field
+			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at origin
+			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+			strcpy(viewStr, " Top View");
+			break;
+		}
+		/* -- unum camera -- */
+		else if (curView == 2) {
+			eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera slightly above and back
+			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at unum ** NEEDS UPDATING **
+			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+			strcpy(viewStr, " Unum View");
+			break;
+		}
+		/* -- duo camera -- */
+		else if (curView == 3) {
+			eye = glm::vec3(0.0f, 4000.0f, 1.0f);		// camera straight above field
+			at = glm::vec3(0.0f, 0.0f, 0.0f);			// look at duo ** NEEDS UPDATING **
+			up = glm::vec3(0.0f, 1.0f, 0.0f);			// up vector Y
+			strcpy(viewStr, " Duo View");
+			break;
+		}
+>>>>>>> cd979d7474ebe2e7a97dbf15c2b1d9ec90718e38
 	}
 	/* update title on page base on view */
 	updateTitle();

@@ -21,8 +21,7 @@ private:
 	int id;
 	glm::mat4 rotationMatrix;
 	glm::mat4 scaleMatrix; //size
-	glm::mat4 translationMatrix;//position (x,y,z)
-	glm::mat4 translate; //where to move to
+	glm::mat4 translationMatrix;  //position (x,y,z)
 	glm::vec3 rotationAxis = glm::vec3(0, 1, 0);; //spin axis
 	glm::vec3 orbitAxis; //may be unnessesary
 	float radians; //spin rate
