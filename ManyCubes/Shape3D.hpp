@@ -45,13 +45,13 @@ public:
 			break; 
 		case 1: //Unum
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(200, 200, 200));
-			radians = glm::radians(.004f);
+			radians = glm::radians(5.0f);
 			translationMatrix = glm::translate(glm::mat4(),
 				glm::vec3(4000, 0, 0));
 			break;
 		case 2: //Duo
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(400, 400, 400));
-			radians = glm::radians(.002f);
+			radians = glm::radians(3.0f);
 			translationMatrix = glm::translate(glm::mat4(),
 				glm::vec3(-9000, 0, 0));
 			break;

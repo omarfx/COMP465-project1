@@ -56,8 +56,8 @@ float boundingRadius;  // modelFile's bounding radius
 int Index =  0;  // global variable indexing into VBO arrays
 //Camera constants
 float frontX = 0;
-float frontY = 10000;
-float frontZ = 20000;
+float frontY = 4000;
+float frontZ = 0;
 float topX = 0;
 float topY = 20000;
 float topZ = 0;
@@ -168,7 +168,7 @@ void updateTitle() {
   glutSetWindowTitle( titleStr);
   }
 
-void display(void) {
+void camUpdate(void){
 
 	float xPosition;
 	float yPosition;
@@ -176,7 +176,73 @@ void display(void) {
 	float atX;
 	float atY;
 	float atZ;
+	float upX;
+	float upY;
+	float upZ;
 	glm::mat4 tempTransMatrix;
+
+	//prelim code to support updating the camera position
+	if (curView == 0){
+		xPosition = 0;
+		yPosition = 4000;
+		zPosition = 0;
+		atX = 0.0f;
+		atY = 0.0f;
+		atZ = 0.0f;
+		upX = 0.0;
+		upY = 1.0;
+		upZ = 0.0;
+		strcpy(viewStr, " Front View");
+	}
+	else if (curView == 1){
+		tempTransMatrix = shape[0]->getTransMatrix();
+		xPosition = tempTransMatrix[3][0];
+		yPosition = 4100;
+		zPosition = 0;
+		atX = tempTransMatrix[3][0];
+		atY = tempTransMatrix[3][1];
+		atZ = tempTransMatrix[3][2];
+		upX = 0.0;
+		upY = 0.0;
+		upZ = 1.0;
+		strcpy(viewStr, " Top View");
+	}
+	else if (curView == 2){
+		tempTransMatrix = shape[1]->getTransMatrix();
+		xPosition = tempTransMatrix[3][0];
+		yPosition = 4000;
+		zPosition = 0;
+		atX = tempTransMatrix[3][0];
+		atY = tempTransMatrix[3][1];
+		atZ = tempTransMatrix[3][2];
+		upX = 0.0;
+		upY = 0.0;
+		upZ = 1.0;
+		strcpy(viewStr, " Unum View");
+	}
+	else {
+		tempTransMatrix = shape[2]->getTransMatrix();
+		xPosition = tempTransMatrix[3][0];
+		yPosition = 4000;
+		zPosition = 0;
+		atX = tempTransMatrix[3][0];
+		atY = tempTransMatrix[3][1];
+		atZ = tempTransMatrix[3][2];
+		upX = 0.0;
+		upY = 0.0;
+		upZ = 1.0;
+		strcpy(viewStr, " Duo View");
+	}
+
+	eye = glm::vec3(xPosition, yPosition, zPosition);
+	at = glm::vec3(atX, atY, atZ);
+	up = glm::vec3(upX, upY, upZ);
+
+
+	viewMatrix = glm::lookAt(eye, at, up);
+}
+
+void display(void) {
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -188,52 +254,7 @@ void display(void) {
     glDrawArrays(GL_TRIANGLES, 0, nVertices);
     }
 
-  //prlim code to support updating the camera position
-	if (curView == 0){
-		xPosition = frontX;
-		yPosition = frontY;
-		zPosition = frontZ;
-		atX = 0.0f;
-		atY = 0.0f;
-		atZ = 0.0f;
-		strcpy(viewStr, " Front View");
-	}
-	else if (curView == 1){
-		xPosition = topX;
-		yPosition = topY;
-		zPosition = topZ;
-		atX = 0.0f;
-		atY = 0.0f;
-		atZ = 0.0f;
-		strcpy(viewStr, " Top View");
-	}
-	else if (curView == 2){
-		tempTransMatrix = shape[1]->getTransMatrix();
-		xPosition = 0;
-		yPosition = 4000;
-		zPosition = 0;
-		atX = tempTransMatrix[3][0];
-		atY = tempTransMatrix[3][1];
-		atZ = tempTransMatrix[3][2];
-		strcpy(viewStr, " Unum View");
-	}
-	else {
-		tempTransMatrix = shape[2]->getTransMatrix();
-		xPosition = 0;
-		yPosition = 4000;
-		zPosition = 0;
-		atX = tempTransMatrix[3][0];
-		atY = tempTransMatrix[3][1];
-		atZ = tempTransMatrix[3][2];
-		strcpy(viewStr, " Duo View");
-	}
-
-	eye = glm::vec3(xPosition, yPosition, zPosition);	// camera slightly above and back
-	at = glm::vec3(atX, atY, atZ);			// look at origin
-	up = glm::vec3(0.0f, 0.0f, 1.0f);			// up vector Y
-
-
-	viewMatrix = glm::lookAt(eye, at, up);
+  camUpdate();
 
   glutSwapBuffers();
 
