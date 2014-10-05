@@ -19,7 +19,7 @@ class Shape3D {
 private:
 
 	int id;
-	glm::mat4 rotationMatrix;
+	glm::mat4 rotationMatrix; 
 	glm::mat4 scaleMatrix; //size
 	glm::mat4 translationMatrix;//position (x,y,z)
 	glm::mat4 translate; //where to move to
@@ -31,7 +31,6 @@ private:
 public:
 
 	Shape3D(int number) {
-		id = number;  // for debugging
 		
 		rotationMatrix = glm::mat4();
 
@@ -46,7 +45,7 @@ public:
 			break; 
 		case 1: //Unum
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(200, 200, 200));
-			radians = glm::radians(5.0f);
+			radians = glm::radians(1.0f);
 			translationMatrix = glm::translate(glm::mat4(),
 				//glm::vec3(4000, 0, 0));
 				glm::vec3(1500, 0, 0)); /* chris debugging */
@@ -54,7 +53,7 @@ public:
 			break;
 		case 2: //Duo
 			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(400, 400, 400));
-			radians = glm::radians(3.0f);
+			radians = glm::radians(1.0f);
 			translationMatrix = glm::translate(glm::mat4(),
 				//glm::vec3(-9000, 0, 0));
 				glm::vec3(-3500, 0, 0)); /* chris debugging */
@@ -98,6 +97,6 @@ public:
 
 	void update() {
 		rotationMatrix = glm::rotate(rotationMatrix, radians, rotationAxis);
-		// translationMatrix = glm::translate(translationMatrix, translation);
+		//translationMatrix = glm::translate(translationMatrix, translation);
 	}
 };

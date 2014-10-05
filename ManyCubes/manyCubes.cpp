@@ -62,7 +62,7 @@ float topX = 0;
 float topY = 20000;
 float topZ = 0;
 /* current camera view */
-int curView = 0;
+int curView = 3;
 
 // display state and "state strings" for title display
 // window title strings
@@ -171,7 +171,7 @@ void updateTitle() {
 void camUpdate(void){
 
 	float xPosition;
-	double yPosition;
+	float yPosition;
 	float zPosition;
 	float atX;
 	float atY;
@@ -208,7 +208,7 @@ void camUpdate(void){
 		strcpy(viewStr, " Top View");
 	}
 	else if (curView == 2){
-		tempTransMatrix = shape[1]->getTransMatrix();
+		tempTransMatrix = shape[1]->getModelMatrix();
 		xPosition = tempTransMatrix[3][0];
 		yPosition = 4000;
 		zPosition = 0;
@@ -221,10 +221,10 @@ void camUpdate(void){
 		strcpy(viewStr, " Unum View");
 	}
 	else {
-		tempTransMatrix = shape[2]->getTransMatrix();
+		tempTransMatrix = shape[2]->getModelMatrix();
 		xPosition = tempTransMatrix[3][0];
 		yPosition = 4000;
-		zPosition = 0;
+		zPosition = tempTransMatrix[3][2];
 		atX = tempTransMatrix[3][0];
 		atY = tempTransMatrix[3][1];
 		atZ = tempTransMatrix[3][2];
@@ -245,10 +245,21 @@ void camUpdate(void){
 void display(void) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
 	// update model matrix, set MVP, draw
 	for(int i = 0; i < nShapes; i++) { 
 		modelMatrix = shape[i]->getModelMatrix(); 
+		/*
+		printf("%d\n",i);
+		for (int c = 0; c < 4; c++){
+			for (int j = 0; j < 4; j++){
+				printf("%f  ", modelMatrix[c][j]);
+			}
+			printf("\n");
+		}
+		printf("\n");
+		*/
+
 		ModelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix; 
 		glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix)); 
 		glDrawArrays(GL_TRIANGLES, 0, nVertices);
