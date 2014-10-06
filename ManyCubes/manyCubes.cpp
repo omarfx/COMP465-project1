@@ -211,7 +211,7 @@ void camUpdate(void){
 		tempTransMatrix = shape[1]->getModelMatrix();
 		xPosition = tempTransMatrix[3][0];
 		yPosition = 4000;
-		zPosition = 0;
+		zPosition = tempTransMatrix[3][2];
 		atX = tempTransMatrix[3][0];
 		atY = tempTransMatrix[3][1];
 		atZ = tempTransMatrix[3][2];
@@ -246,6 +246,7 @@ void display(void) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+	camUpdate();
 	// update model matrix, set MVP, draw
 	for(int i = 0; i < nShapes; i++) { 
 		modelMatrix = shape[i]->getModelMatrix(); 
@@ -265,9 +266,9 @@ void display(void) {
 		glDrawArrays(GL_TRIANGLES, 0, nVertices);
     }
 
-	camUpdate();
 
 	glutSwapBuffers();
+
 
 	frameCount++;
 	// see if a second has passed to set estimated fps information
