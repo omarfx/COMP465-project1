@@ -2,20 +2,20 @@
 # define __Windows__ // define your target operating system
 # include "../includes465/include465.hpp"  
 
-# include "Shape3D.hpp"
+# include "Planet.hpp"
 # include "SpaceShip.hpp"
 # include "Camera.hpp"
 
 // Shapes
-const int nShapes = 5;
-Shape3D * shape[nShapes];
+const int nPlanets = 5;
+Planet * planet[nPlanets];
 SpaceShip * spaceShip;
 Camera * topView;
 Camera * unumView;
 Camera * frontView;
 Camera * duoView;
 // Model for shapes
-char * modelFile = "cube-1-1-1.tri"; // name of planet model file
+char * planetModFile = "cube-1-1-1.tri"; // name of planet model file
 char * shipModFile = "ship.tri"; // name of ship model File
 const GLuint nVertices = 480 * 3;  // 3 vertices per line (surface) of model file  
 const GLuint shipVertices = 515 * 3;
@@ -65,12 +65,12 @@ double currentTime, lastTime, timeInterval;
 
 
 void init (void) {
-  boundingRadius = loadTriModel(modelFile, nVertices, vertex, diffuseColorMaterial, normal);
+  boundingRadius = loadTriModel(planetModFile, nVertices, vertex, diffuseColorMaterial, normal);
   if (boundingRadius == -1.0f) {
     printf("loadTriModel error:  returned -1.0f \n");
     exit(1); }
     else
-      printf("loaded %s model with %7.2f bounding radius \n", modelFile, boundingRadius);
+      printf("loaded %s model with %7.2f bounding radius \n", planetModFile, boundingRadius);
 
   shipBoundingRadius = loadTriModel(shipModFile, shipVertices, shipVertex, shipDiffuseColorMaterial, shipNormal);
   if (shipBoundingRadius == -1.0f) {
@@ -118,13 +118,13 @@ void init (void) {
   glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 
   // create shape
-  for(int i = 0; i < nShapes; i++) shape[i] = new Shape3D(i);
-  printf("%d Shapes created \n", nShapes);
+  for(int i = 0; i < nPlanets; i++) planet[i] = new Planet(i);
+  printf("%d Planets created \n", nPlanets);
 
-  frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), shape[0]);
-  topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), shape[0]);
-  unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), shape[1]);
-  duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), shape[2]);
+  frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), planet[0]);
+  topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[0]);
+  unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[1]);
+  duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[2]);
 
   lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
   }
@@ -170,8 +170,8 @@ void display(void) {
 	
 	camUpdate();
 	// update model matrix, set MVP, draw
-	for(int i = 0; i < nShapes; i++) { 
-		modelMatrix = shape[i]->getModelMatrix(); 
+	for(int i = 0; i < nPlanets; i++) { 
+		modelMatrix = planet[i]->getModelMatrix(); 
 		/*
 		printf("%d\n",i);
 		for (int c = 0; c < 4; c++){
@@ -208,7 +208,7 @@ void display(void) {
 // timerDelay = 40, or 25 updates / second
 void update (int i) { 
   glutTimerFunc(timerDelay, update, 1);
-  for(int i = 0; i < nShapes; i++) shape[i] -> update();  
+  for(int i = 0; i < nPlanets; i++) planet[i] -> update();  
   }
 
 // Quit or set the view
