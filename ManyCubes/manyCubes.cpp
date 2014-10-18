@@ -1,5 +1,11 @@
 
 # define __Windows__ // define your target operating system
+# define Ruber 0
+# define Unum 1
+# define Duo 2
+# define Primus 3
+# define Secundus 4
+
 # include "../includes465/include465.hpp"  
 
 # include "Planet.hpp"
@@ -64,70 +70,77 @@ int timerDelay = 40, frameCount = 0;  // A delay of 40 milliseconds is 25 update
 double currentTime, lastTime, timeInterval; 
 
 
-void init (void) {
-  boundingRadius = loadTriModel(planetModFile, nVertices, vertex, diffuseColorMaterial, normal);
-  if (boundingRadius == -1.0f) {
-    printf("loadTriModel error:  returned -1.0f \n");
-    exit(1); }
-    else
-      printf("loaded %s model with %7.2f bounding radius \n", planetModFile, boundingRadius);
+void init(void) {
+	boundingRadius = loadTriModel(planetModFile, nVertices, vertex, diffuseColorMaterial, normal);
+	if (boundingRadius == -1.0f) {
+		printf("loadTriModel error:  returned -1.0f \n");
+		exit(1);
+	}
+	else
+		printf("loaded %s model with %7.2f bounding radius \n", planetModFile, boundingRadius);
 
-  shipBoundingRadius = loadTriModel(shipModFile, shipVertices, shipVertex, shipDiffuseColorMaterial, shipNormal);
-  if (shipBoundingRadius == -1.0f) {
-	  printf("loadTriModel error:  returned -1.0f \n");
-	  exit(1);
-  }
-  else
-	  printf("loaded %s model with %7.2f bounding radius \n", shipModFile, shipBoundingRadius);
+	shipBoundingRadius = loadTriModel(shipModFile, shipVertices, shipVertex, shipDiffuseColorMaterial, shipNormal);
+	if (shipBoundingRadius == -1.0f) {
+		printf("loadTriModel error:  returned -1.0f \n");
+		exit(1);
+	}
+	else
+		printf("loaded %s model with %7.2f bounding radius \n", shipModFile, shipBoundingRadius);
 
-  shaderProgram = loadShaders(vertexShaderFile,fragmentShaderFile);
-  glUseProgram(shaderProgram);
+	shaderProgram = loadShaders(vertexShaderFile, fragmentShaderFile);
+	glUseProgram(shaderProgram);
 
-  glGenVertexArrays( 1, &vao );
-  glBindVertexArray( vao );
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 
-  // Create and initialize a buffer object
-  // GLuint buffers;
-  glGenBuffers( 1, &buffer );
-  glBindBuffer( GL_ARRAY_BUFFER, buffer );
-  glBufferData( GL_ARRAY_BUFFER, sizeof(vertex) + sizeof(diffuseColorMaterial) + sizeof(normal), NULL, GL_STATIC_DRAW );
-  glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vertex), vertex );
-  glBufferSubData( GL_ARRAY_BUFFER, sizeof(vertex), sizeof(diffuseColorMaterial), diffuseColorMaterial );
-  glBufferSubData( GL_ARRAY_BUFFER, sizeof(vertex) + sizeof(diffuseColorMaterial), sizeof(normal), normal );
+	// Create and initialize a buffer object
+	// GLuint buffers;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex) + sizeof(diffuseColorMaterial) + sizeof(normal), NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertex), vertex);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertex), sizeof(diffuseColorMaterial), diffuseColorMaterial);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertex) + sizeof(diffuseColorMaterial), sizeof(normal), normal);
 
 
-  // set up vertex arrays (after shaders are loaded)
-  GLuint vPosition = glGetAttribLocation( shaderProgram, "vPosition" );
-  glEnableVertexAttribArray( vPosition );
-  glVertexAttribPointer( vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
+	// set up vertex arrays (after shaders are loaded)
+	GLuint vPosition = glGetAttribLocation(shaderProgram, "vPosition");
+	glEnableVertexAttribArray(vPosition);
+	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
-  GLuint vColor = glGetAttribLocation( shaderProgram, "vColor" );
-  glEnableVertexAttribArray( vColor );
-  glVertexAttribPointer( vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vertex)) );
+	GLuint vColor = glGetAttribLocation(shaderProgram, "vColor");
+	glEnableVertexAttribArray(vColor);
+	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vertex)));
 
-  // Normal code is here for later use with lighting and shaders
-  GLuint vNormal = glGetAttribLocation( shaderProgram, "vNormal" );
-  glEnableVertexAttribArray( vNormal);
-  glVertexAttribPointer( vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vertex) + sizeof(diffuseColorMaterial)) );
+	// Normal code is here for later use with lighting and shaders
+	GLuint vNormal = glGetAttribLocation(shaderProgram, "vNormal");
+	glEnableVertexAttribArray(vNormal);
+	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vertex) + sizeof(diffuseColorMaterial)));
 
-  MVP = glGetUniformLocation(shaderProgram, "ModelViewProjection");
-  
-  
-  // set render state values
-  glEnable(GL_DEPTH_TEST);
-  glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+	MVP = glGetUniformLocation(shaderProgram, "ModelViewProjection");
 
-  // create shape
-  for(int i = 0; i < nPlanets; i++) planet[i] = new Planet(i);
-  printf("%d Planets created \n", nPlanets);
 
-  frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), planet[0]);
-  topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[0]);
-  unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[1]);
-  duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[2]);
+	// set render state values
+	glEnable(GL_DEPTH_TEST);
+	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 
-  lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
-  }
+	// create shape
+
+	planet[Ruber] = new Planet(glm::vec3(2000.0f, 2000.0f, 2000.0f), 0.0f, glm::vec3(0, 0, 0), false);
+	planet[Unum] = new Planet(glm::vec3(200.0f, 200.0f, 200.0f), 0.004f, glm::vec3(4000, 0, 0), true, planet[Ruber]);
+	planet[Duo] = new Planet(glm::vec3(400.0f, 400.0f, 400.0f), 0.002f, glm::vec3(-9000, 0, 0), true, planet[Ruber]);
+	planet[Primus] = new Planet(glm::vec3(100.0f, 100.0f, 100.0f), 0.004f, glm::vec3(-8100, 0, 0), true, planet[Duo]);
+	planet[Secundus] = new Planet(glm::vec3(150.0f, 150.0f, 150.0f), 0.002f, glm::vec3(-7250, 0, 0), true, planet[Duo]);
+
+	printf("%d Planets created \n", nPlanets);
+
+	frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), planet[0]);
+	topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[0]);
+	unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[1]);
+	duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[2]);
+
+	lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
+}
 
 void reshape(int width, int height) {
   glViewport(0, 0, width, height);
@@ -145,7 +158,7 @@ void updateTitle() {
 
 void camUpdate(void){
 
-	//prelim code to support updating the camera position
+	//on each pass of display the viewmatrix is set correctly based on which camera we are set to
 	if (curView == 0){
 		viewMatrix = frontView->getViewMatrix();
 		strcpy(viewStr, " Front View");
