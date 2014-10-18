@@ -11,32 +11,38 @@ class Camera {
 private:
 
 	glm::mat4 viewMatrix;
-	glm::vec3 eye, at, up;
+	glm::vec3 eye, at, up, eyeOffset, atOffset, upOffset;
 	glm::mat4 tempTransMatrix;
-	
-	enum CamMode {Ship, Top, Front, Planet};
+	Shape3D * camSubject;
+
 
 public:
 
-	Camera(glm::vec3 eyeOffset, glm::vec3 atOffset, glm::vec3 upOffset, Shape3D * camSubject, CamMode mode) {
+	Camera(glm::vec3 eyeOffsetIn, glm::vec3 atOffsetIn, glm::vec3 upOffsetIn, Shape3D * camSubjectIn) {
 
-		if (mode == Planet){
-			camSubject->getModelMatrix();
-		}
-		eye = eyeIn;
-		at = atIn;
-		up = upIn;
+		
+			eyeOffset = eyeOffsetIn;
+			atOffset = atOffsetIn;
+			upOffset = upOffsetIn;
+			
+			camSubject = camSubjectIn;
+
+			update();
 	
-
-		viewMatrix = glm::lookAt(eye, at, up);
 	}
 
 	glm::mat4 getViewMatrix() {
+		update();
 		return viewMatrix;
 	}
 
 
 	void update() {
-		
+		tempTransMatrix = camSubject->getModelMatrix();
+		eye = glm::vec3(tempTransMatrix[3][0] + eyeOffset[0], tempTransMatrix[3][1] + eyeOffset[1], tempTransMatrix[3][2] + eyeOffset[2]);
+		at = glm::vec3(tempTransMatrix[3][0] + atOffset[0], tempTransMatrix[3][1] + atOffset[1], tempTransMatrix[3][2] + atOffset[2]);;
+		up = upOffset;
+
+		viewMatrix = glm::lookAt(eye, at, up);
 	}
 };

@@ -4,11 +4,14 @@
 
 # include "Shape3D.hpp"
 # include "SpaceShip.hpp"
+# include "Camera.hpp"
 
 // Shapes
 const int nShapes = 5;
 Shape3D * shape[nShapes];
 SpaceShip * spaceShip;
+Camera * topView;
+Camera * unumView;
 // Model for shapes
 char * modelFile = "cube-1-1-1.tri"; // name of planet model file
 char * shipModFile = "ship.tri"; // name of ship model File
@@ -17,13 +20,7 @@ const GLuint shipVertices = 515 * 3;
 float boundingRadius;  // modelFile's bounding radius
 float shipBoundingRadius;
 int Index =  0;  // global variable indexing into VBO arrays
-//Camera constants
-float frontX = 0;
-float frontY = 4000;
-float frontZ = 0;
-float topX = 0;
-float topY = 20000;
-float topZ = 0;
+
 /* current camera view */
 int curView = 0;
 
@@ -127,6 +124,9 @@ void init (void) {
   for(int i = 0; i < nShapes; i++) shape[i] = new Shape3D(i);
   printf("%d Shapes created \n", nShapes);
 
+  topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), shape[0]);
+  unumView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), shape[0]);
+
   lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
   }
 
@@ -167,20 +167,13 @@ void camUpdate(void){
 		atZ = 0.0f;
 		upX = 0.0;
 		upY = 1.0;
-		upZ = -1.0;
+		upZ = 0.0;
 		strcpy(viewStr, " Front View");
 	}
 	else if (curView == 1){
-		xPosition = 0;
-		yPosition = 20000;
-		zPosition = 0;
-		atX = 0;
-		atY = 0;
-		atZ = 0;
-		upX = 0.0;
-		upY = 0.0;
-		upZ = 1.0;
+		viewMatrix = topView->getViewMatrix();
 		strcpy(viewStr, " Top View");
+		return;
 	}
 	else if (curView == 2){
 		tempTransMatrix = shape[1]->getModelMatrix();
@@ -265,22 +258,81 @@ void update (int i) {
   }
 
 // Quit or set the view
+// handle basic keyboard functions
 void keyboard(unsigned char key, int x, int y) {
-	glm::mat4 tempTransMatrix;
+	
 	switch (key) {
 		/* -- quit -- */
 	case 033: case 'q':  case 'Q':
 		exit(EXIT_SUCCESS);
 		break;
-		/* -- change view -- */
+		/* -- warp ship -- */
+	case 'w': case 'W':
+		printf("Warp ship!");
+		break;
+		/* -- fire missile -- */
+	case 'f': case 'F':
+		printf("Fire missile!");
+		break;
+		/* -- fire missile -- */
+	case 'g': case 'G':
+		printf("Toggle gravity!");
+		break;
+		/* -- camera view -- */
 	case 'v': case 'V':
 		/* -- evaluate view -- */
 		curView = (curView + 1) % 4;
 		break;
+		/* -- next tq value -- */
+	case 't': case 'T':
+		printf("Next TQ value!");
+		break;
+		/* -- next ship speed -- */
+	case 's': case 'S':
+		printf("Change ship speed!");
+		break;
 	}
 	/* update title on page base on view */
 	updateTitle();
+}
 
+// handle special keyboard functions
+void specialKeyboard(int key, int x, int y) {
+	
+	switch (key) {
+		/* -- move left -- */
+	case GLUT_KEY_LEFT:
+		if (glutGetModifiers() == GLUT_ACTIVE_CTRL) {
+			printf("Roll left!");
+		}
+		else {
+			printf("Move left!");
+		} break;
+		/* -- move forward -- */
+	case GLUT_KEY_UP:
+		if (glutGetModifiers() == GLUT_ACTIVE_CTRL) {
+			printf("Pitch forward!");
+		}
+		else {
+			printf("Move forward!");
+		} break;
+		/* -- move right -- */
+	case GLUT_KEY_RIGHT:
+		if (glutGetModifiers() == GLUT_ACTIVE_CTRL) {
+			printf("Roll right!");
+		}
+		else {
+			printf("Move right!");
+		} break;
+		/* -- move down -- */
+	case GLUT_KEY_DOWN:
+		if (glutGetModifiers() == GLUT_ACTIVE_CTRL) {
+			printf("Pitch backward!");
+		}
+		else {
+			printf("Move backward!");
+		} break;
+	}
 }
     
 int main(int argc, char* argv[]) {
@@ -307,6 +359,7 @@ int main(int argc, char* argv[]) {
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
+  glutSpecialFunc(specialKeyboard);
   glutTimerFunc(timerDelay, update, 1);
   glutIdleFunc(display);
   glutMainLoop();
