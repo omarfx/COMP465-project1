@@ -12,6 +12,8 @@ Shape3D * shape[nShapes];
 SpaceShip * spaceShip;
 Camera * topView;
 Camera * unumView;
+Camera * frontView;
+Camera * duoView;
 // Model for shapes
 char * modelFile = "cube-1-1-1.tri"; // name of planet model file
 char * shipModFile = "ship.tri"; // name of ship model File
@@ -110,11 +112,6 @@ void init (void) {
 
   MVP = glGetUniformLocation(shaderProgram, "ModelViewProjection");
   
-// initially use a front view
-  eye = glm::vec3(0.0f, 0.0f, 2000.0f);   // eye is 1000 "out of screen" from origin
-  at  = glm::vec3(0.0f, 0.0f,    0.0f);   // looking at origin
-  up  = glm::vec3(0.0f, 1.0f,    0.0f);   // camera'a up vector
-  viewMatrix = glm::lookAt(eye, at, up);
   
   // set render state values
   glEnable(GL_DEPTH_TEST);
@@ -124,8 +121,10 @@ void init (void) {
   for(int i = 0; i < nShapes; i++) shape[i] = new Shape3D(i);
   printf("%d Shapes created \n", nShapes);
 
+  frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), shape[0]);
   topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), shape[0]);
-  unumView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), shape[0]);
+  unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), shape[1]);
+  duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), shape[2]);
 
   lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
   }
@@ -146,68 +145,23 @@ void updateTitle() {
 
 void camUpdate(void){
 
-	float xPosition;
-	float yPosition;
-	float zPosition;
-	float atX;
-	float atY;
-	float atZ;
-	float upX;
-	float upY;
-	float upZ;
-	glm::mat4 tempTransMatrix;
-
 	//prelim code to support updating the camera position
 	if (curView == 0){
-		xPosition = 0;
-		yPosition = 10000;
-		zPosition = 20000;
-		atX = 0.0f;
-		atY = 0.0f;
-		atZ = 0.0f;
-		upX = 0.0;
-		upY = 1.0;
-		upZ = 0.0;
+		viewMatrix = frontView->getViewMatrix();
 		strcpy(viewStr, " Front View");
 	}
 	else if (curView == 1){
 		viewMatrix = topView->getViewMatrix();
 		strcpy(viewStr, " Top View");
-		return;
 	}
 	else if (curView == 2){
-		tempTransMatrix = shape[1]->getModelMatrix();
-		xPosition = tempTransMatrix[3][0];
-		yPosition = 4000;
-		zPosition = tempTransMatrix[3][2];
-		atX = tempTransMatrix[3][0];
-		atY = tempTransMatrix[3][1];
-		atZ = tempTransMatrix[3][2];
-		upX = 0.0;
-		upY = 0.0;
-		upZ = 1.0;
+		viewMatrix = unumView->getViewMatrix();
 		strcpy(viewStr, " Unum View");
 	}
-	else {
-		tempTransMatrix = shape[2]->getModelMatrix();
-		xPosition = tempTransMatrix[3][0];
-		yPosition = 4000;
-		zPosition = tempTransMatrix[3][2];
-		atX = tempTransMatrix[3][0];
-		atY = tempTransMatrix[3][1];
-		atZ = tempTransMatrix[3][2];
-		upX = 0.0;
-		upY = 0.0;
-		upZ = 1.0;
+	else if (curView == 3) {
+		viewMatrix = duoView->getViewMatrix();
 		strcpy(viewStr, " Duo View");
 	}
-
-	eye = glm::vec3(xPosition, yPosition, zPosition);
-	at = glm::vec3(atX, atY, atZ);
-	up = glm::vec3(upX, upY, upZ);
-
-	viewMatrix = glm::lookAt(eye, at, up);
-
 }
 
 void display(void) {
