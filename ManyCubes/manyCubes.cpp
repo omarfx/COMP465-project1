@@ -117,7 +117,7 @@ void init (void) {
   eye = glm::vec3(0.0f, 0.0f, 2000.0f);   // eye is 1000 "out of screen" from origin
   at  = glm::vec3(0.0f, 0.0f,    0.0f);   // looking at origin
   up  = glm::vec3(0.0f, 1.0f,    0.0f);   // camera'a up vector
-  viewMatrix = glm::lookAt(eye, at, up);
+  viewMatrix = glm::lookAt(eye, at, up);h
   
   // set render state values
   glEnable(GL_DEPTH_TEST);
@@ -132,7 +132,7 @@ void init (void) {
 
 void reshape(int width, int height) {
   glViewport(0, 0, width, height);
-  projectionMatrix = glm::perspective(glm::radians(45.0f), (GLfloat) width /  (GLfloat) height, 1.0f, 10000.0f); 
+  projectionMatrix = glm::perspective(glm::radians(45.0f), (GLfloat) width /  (GLfloat) height, 1.0f, 100000.0f); 
   }
 
 // update and display animation state in window title
