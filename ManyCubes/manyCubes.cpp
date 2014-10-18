@@ -8,7 +8,7 @@
 // Shapes
 const int nShapes = 5;
 Shape3D * shape[nShapes];
-Shape3D * spaceShip;
+SpaceShip * spaceShip;
 // Model for shapes
 char * modelFile = "cube-1-1-1.tri"; // name of planet model file
 char * shipModFile = "ship.tri"; // name of ship model File
@@ -117,7 +117,7 @@ void init (void) {
   eye = glm::vec3(0.0f, 0.0f, 2000.0f);   // eye is 1000 "out of screen" from origin
   at  = glm::vec3(0.0f, 0.0f,    0.0f);   // looking at origin
   up  = glm::vec3(0.0f, 1.0f,    0.0f);   // camera'a up vector
-  viewMatrix = glm::lookAt(eye, at, up);h
+  viewMatrix = glm::lookAt(eye, at, up);
   
   // set render state values
   glEnable(GL_DEPTH_TEST);
@@ -160,8 +160,8 @@ void camUpdate(void){
 	//prelim code to support updating the camera position
 	if (curView == 0){
 		xPosition = 0;
-		yPosition = 4000;
-		zPosition = 4000;
+		yPosition = 10000;
+		zPosition = 20000;
 		atX = 0.0f;
 		atY = 0.0f;
 		atZ = 0.0f;
@@ -172,8 +172,7 @@ void camUpdate(void){
 	}
 	else if (curView == 1){
 		xPosition = 0;
-		//yPosition = 10951;
-		yPosition = 10000; /* chris debugging */
+		yPosition = 20000;
 		zPosition = 0;
 		atX = 0;
 		atY = 0;

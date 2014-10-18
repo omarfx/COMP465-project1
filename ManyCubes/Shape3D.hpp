@@ -37,7 +37,7 @@ public:
 		//I believe radians var and translation matrix are set corectly but scale and rotation are place holder for now
 		switch (number) { // make model larger
 		case 0: //Ruber
-			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(1000, 1000, 1000));
+			scaleMatrix = glm::scale(glm::mat4(), glm::vec3(2000, 2000, 2000));
 			radians = glm::radians(0.0f);
 			translationMatrix = glm::translate(glm::mat4(),
 				glm::vec3(0, 0, 0));
@@ -48,7 +48,7 @@ public:
 			radians = glm::radians(1.0f);
 			translationMatrix = glm::translate(glm::mat4(),
 				//glm::vec3(4000, 0, 0));
-				glm::vec3(1500, 0, 0)); /* chris debugging */
+				glm::vec3(4000, 0, 0)); /* chris debugging */
 			orbital = true;
 			break;
 		case 2: //Duo
@@ -56,7 +56,7 @@ public:
 			radians = glm::radians(1.0f);
 			translationMatrix = glm::translate(glm::mat4(),
 				//glm::vec3(-9000, 0, 0));
-				glm::vec3(-3500, 0, 0)); /* chris debugging */
+				glm::vec3(-9000, 0, 0)); /* chris debugging */
 			orbital = true;
 			break;
 		case 3: //Primus
