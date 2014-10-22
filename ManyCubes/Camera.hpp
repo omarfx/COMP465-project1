@@ -31,18 +31,18 @@ public:
 	
 	}
 
-	glm::mat4 getViewMatrix() {
-		update();
-		return viewMatrix;
+	glm::mat4 getViewMatrix(glm::mat4 subPos) {
+		
+		tempTransMatrix = subPos;
+		eye = glm::vec3(tempTransMatrix[3][0] + eyeOffset[0], tempTransMatrix[3][1] + eyeOffset[1], tempTransMatrix[3][2] + eyeOffset[2]);
+		at = glm::vec3(tempTransMatrix[3][0] + atOffset[0], tempTransMatrix[3][1] + atOffset[1], tempTransMatrix[3][2] + atOffset[2]);;
+		up = upOffset;
+		
+		return glm::lookAt(eye, at, up);
 	}
 
 
 	void update() {
-		tempTransMatrix = camSubject->getModelMatrix();
-		eye = glm::vec3(tempTransMatrix[3][0] + eyeOffset[0], tempTransMatrix[3][1] + eyeOffset[1], tempTransMatrix[3][2] + eyeOffset[2]);
-		at = glm::vec3(tempTransMatrix[3][0] + atOffset[0], tempTransMatrix[3][1] + atOffset[1], tempTransMatrix[3][2] + atOffset[2]);;
-		up = upOffset;
-
-		viewMatrix = glm::lookAt(eye, at, up);
+		;
 	}
 };

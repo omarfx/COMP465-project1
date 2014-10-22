@@ -25,29 +25,50 @@ private:
 	glm::mat4 translate; //where to move to
 	glm::vec3 rotationAxis = glm::vec3(0, 1, 0);; //spin axis
 	glm::vec3 orbitAxis; //may be unnessesary
+	glm::vec3 translation; //used to move the point of rotation to the origin and back
 	float radians; //spin rate
 	bool orbital, isTheSun;
+	bool isAMoon;
 	Planet * orbitTarget;
+	char * planetName;
+	glm::mat4 tempMatrix;
 
 public:
 	//constructor for the sun
-	Planet(glm::vec3 scale, float rads, glm::vec3 trans, bool orbit){
+	Planet(glm::vec3 scale, glm::vec3 trans, char* name, float spin){
+		rotationMatrix = glm::mat4();  // no initial orientation
 		scaleMatrix = glm::scale(glm::mat4(), scale);
-		radians = glm::radians(rads);
-		translationMatrix = glm::translate(glm::mat4(),
-			trans);
-		orbital = orbit;
+		radians = 0.0;
+		translationMatrix = glm::translate(glm::mat4(), trans);
 		isTheSun = true;
+		planetName = name;
 	}
-	//constructor for the planets and moons
-	Planet(glm::vec3 scale, float rads, glm::vec3 trans, bool orbit, Planet * orbitTargetIn){
+	//constructor for the planets
+	Planet(glm::vec3 scale, float rads, glm::vec3 trans, char* name, float spin){
+		rotationMatrix = glm::mat4();  // no initial orientation
 		scaleMatrix = glm::scale(glm::mat4(), scale);
 		radians = glm::radians(rads);
-		translationMatrix = glm::translate(glm::mat4(),
-			trans);
-		orbital = orbit;
-		orbitTarget = orbitTargetIn;
+		translationMatrix = glm::translate(glm::mat4(), trans);
 		isTheSun = false;
+		isAMoon = false;
+		planetName = name;
+	}
+	//constructor for the moons
+	Planet(glm::vec3 scale, float rads, glm::vec3 trans, Planet * orbitTargetIn, char* name, float spin){
+		orbitTarget = orbitTargetIn;
+		rotationMatrix = glm::mat4();  // no initial orientation
+		scaleMatrix = glm::scale(glm::mat4(), scale);
+		radians = glm::radians(rads);
+		
+		translationMatrix = glm::translate(glm::mat4(), trans);
+		tempMatrix = orbitTarget->getTransMatrix();
+		for (int i = 0; i < 3; i++){
+			translationMatrix[3][i] = translationMatrix[3][i] - tempMatrix[3][i];
+		}
+
+		isTheSun = false;
+		isAMoon = true;
+		planetName = name;
 	}
 
 	glm::mat4 getTransMatrix() {
@@ -56,21 +77,28 @@ public:
 
 	glm::mat4 getModelMatrix() {
 
-		if (orbital) // orbital rotation
+		if (!isAMoon)
 			return(rotationMatrix * translationMatrix * scaleMatrix);
-		else  // center rotation
+		else if (isAMoon){ // orbital 
+			//tempMatrix = orbitTarget->getModelMatrix();
+			return(tempMatrix * rotationMatrix * translationMatrix * scaleMatrix);
+		}
+		else
 			return(translationMatrix * rotationMatrix * scaleMatrix);
 	}
 
 	void update() {
-		//printf("Rotation");
+		
+		rotationMatrix = glm::rotate(rotationMatrix, radians, rotationAxis);
+		
+
+		//printf("%s Rotation \n", planetName);
 		//for (int c = 0; c < 4; c++){
 			//for (int j = 0; j < 4; j++){
-				//printf("%f  ", rotationMatrix[c][j]);
+				//printf("%f  ", rotationMatrix[j][c]);
 			//}
 			//printf("\n");
+		//}
 		//printf("\n");
-		rotationMatrix = glm::rotate(rotationMatrix, radians, rotationAxis);
-		//translationMatrix = glm::translate(translationMatrix, translation);
 	}
 };
