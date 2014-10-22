@@ -75,12 +75,25 @@ public:
 		return translationMatrix;
 	}
 
+	glm::vec3 getTransVec(){
+		glm::mat4 tempMat = getModelMatrix();
+		glm::vec3 tempVec;
+
+		tempVec[0] = tempMat[3][0];
+		tempVec[1] = tempMat[3][1];
+		tempVec[2] = tempMat[3][2];
+
+		return tempVec;
+	}
+
 	glm::mat4 getModelMatrix() {
 
 		if (!isAMoon)
 			return(rotationMatrix * translationMatrix * scaleMatrix);
 		else if (isAMoon){ // orbital 
-			//tempMatrix = orbitTarget->getModelMatrix();
+			glm::vec3 trans = orbitTarget->getTransVec();
+			
+			tempMatrix = glm::translate(glm::mat4(), trans);
 			return(tempMatrix * rotationMatrix * translationMatrix * scaleMatrix);
 		}
 		else

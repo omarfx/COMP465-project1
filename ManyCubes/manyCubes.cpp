@@ -118,7 +118,7 @@ void init(void) {
 
 	// set render state values
 	glEnable(GL_DEPTH_TEST);
-	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 	printf("Cameras created \n");
 	// create solar system
