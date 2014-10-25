@@ -118,7 +118,7 @@ void init(void) {
 
 	// set render state values
 	glEnable(GL_DEPTH_TEST);
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	printf("Cameras created \n");
 	// create solar system
@@ -156,19 +156,19 @@ void camUpdate(void){
 
 	//on each pass of display the viewmatrix is set correctly based on which camera we are set to
 	if (curView == 0){
-		viewMatrix = frontView->getViewMatrix(planetMatrix[0]);
+		viewMatrix = frontView->getViewMatrix(planetMatrix[Ruber]);
 		strcpy(viewStr, " Front View");
 	}
 	else if (curView == 1){
-		viewMatrix = topView->getViewMatrix(planetMatrix[0]);
+		viewMatrix = topView->getViewMatrix(planetMatrix[Ruber]);
 		strcpy(viewStr, " Top View");
 	}
 	else if (curView == 2){
-		viewMatrix = unumView->getViewMatrix(planetMatrix[1]);
+		viewMatrix = unumView->getViewMatrix(planetMatrix[Unum]);
 		strcpy(viewStr, " Unum View");
 	}
 	else if (curView == 3) {
-		viewMatrix = duoView->getViewMatrix(planetMatrix[2]);
+		viewMatrix = duoView->getViewMatrix(planetMatrix[Duo]);
 		strcpy(viewStr, " Duo View");
 	}
 }
@@ -180,7 +180,6 @@ void display(void) {
 	// update model matrix, set MVP, draw
 	for (int i = 0; i < nPlanets; i++) {
 		planetMatrix[i] = planet[i]->getModelMatrix();
-
 	}
 	camUpdate();
 	for (int i = 0; i < nPlanets; i++) {
