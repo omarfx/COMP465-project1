@@ -5,22 +5,24 @@
 # define Duo 2
 # define Primus 3
 # define Secundus 4
+# define Ship 5
 
 # include "../includes465/include465.hpp"  
 
 # include "Planet.hpp"
 # include "SpaceShip.hpp"
 # include "Camera.hpp"
+//# include "Shape3D.hpp"
 
-// Shapes
-const int nPlanets = 5;
-Planet * planet[nPlanets];
-SpaceShip * spaceShip;
+//Cameras
 Camera * topView;
 Camera * unumView;
 Camera * frontView;
 Camera * duoView;
-// Model for shapes
+// Shapes
+const int nModels = 5;
+Shape3D * model[nModels];
+// Models for shapes
 char * planetModFile = "cube-1-1-1.tri"; // name of planet model file
 char * shipModFile = "ship.tri"; // name of ship model File
 const GLuint nVertices = 480 * 3;  // 3 vertices per line (surface) of model file  
@@ -46,7 +48,7 @@ char * vertexShaderFile = "simpleVertex.glsl";
 char * fragmentShaderFile = "simpleFragment.glsl";
 GLuint MVP ;  // Model View Projection matrix's handle
 glm::mat4 projectionMatrix;		// set in reshape()
-glm::mat4 planetMatrix[nPlanets];		// set in shape[i]-->updateDraw()
+glm::mat4 modelMatrix[nModels];		// set in display
 glm::mat4 viewMatrix;			// set in keyboard()
 glm::mat4 ModelViewProjectionMatrix; // set in display();
 
@@ -122,18 +124,22 @@ void init(void) {
 
 	printf("Cameras created \n");
 	// create solar system
-	planet[Ruber] = new Planet(glm::vec3(2000.0f, 2000.0f, 2000.0f), glm::vec3(0, 0, 0), "Ruber", 4.0);
-	planet[Unum] = new Planet(glm::vec3(200.0f, 200.0f, 200.0f), 1.0f, glm::vec3(4000, 0, 0), "Unum", 2.0);
-	planet[Duo] = new Planet(glm::vec3(400.0f, 400.0f, 400.0f), 0.5f, glm::vec3(-9000, 0, 0), "Duo", 2.0);
-	planet[Primus] = new Planet(glm::vec3(100.0f, 100.0f, 100.0f), 1.0f, glm::vec3(-8100, 0, 0), planet[Duo], "Primus", 2.0);
-	planet[Secundus] = new Planet(glm::vec3(150.0f, 150.0f, 150.0f), 0.5f, glm::vec3(-7250, 0, 0), planet[Duo], "Sucundus", 2.0);
+	model[Ruber] = new Planet(glm::vec3(2000.0f, 2000.0f, 2000.0f), glm::vec3(0, 0, 0), "Ruber", 4.0);
+	model[Unum] = new Planet(glm::vec3(200.0f, 200.0f, 200.0f), 1.0f, glm::vec3(4000, 0, 0), "Unum", 2.0);
+	model[Duo] = new Planet(glm::vec3(400.0f, 400.0f, 400.0f), 0.5f, glm::vec3(-9000, 0, 0), "Duo", 2.0);
+	model[Primus] = new Planet(glm::vec3(100.0f, 100.0f, 100.0f), 1.0f, glm::vec3(-8100, 0, 0), model[Duo], "Primus", 2.0);
+	model[Secundus] = new Planet(glm::vec3(150.0f, 150.0f, 150.0f), 0.5f, glm::vec3(-7250, 0, 0), model[Duo], "Sucundus", 2.0);
 
-	printf("%d Planets created \n", nPlanets);
+	printf("%d Planets created \n", (nModels - 1));
+	//create space ship
+	//model[Ship] = new SpaceShip(1);
+
+	printf("%d Ship created \n", 1);
 	//create cameras
-	frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), planet[Ruber]);
-	topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[Ruber]);
-	unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[Unum]);
-	duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), planet[Duo]);
+	frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), model[Ruber]);
+	topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), model[Ruber]);
+	unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), model[Unum]);
+	duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), model[Duo]);
 
 	lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
 }
@@ -156,19 +162,19 @@ void camUpdate(void){
 
 	//on each pass of display the viewmatrix is set correctly based on which camera we are set to
 	if (curView == 0){
-		viewMatrix = frontView->getViewMatrix(planetMatrix[Ruber]);
+		viewMatrix = frontView->getViewMatrix(modelMatrix[Ruber]);
 		strcpy(viewStr, " Front View");
 	}
 	else if (curView == 1){
-		viewMatrix = topView->getViewMatrix(planetMatrix[Ruber]);
+		viewMatrix = topView->getViewMatrix(modelMatrix[Ruber]);
 		strcpy(viewStr, " Top View");
 	}
 	else if (curView == 2){
-		viewMatrix = unumView->getViewMatrix(planetMatrix[Unum]);
+		viewMatrix = unumView->getViewMatrix(modelMatrix[Unum]);
 		strcpy(viewStr, " Unum View");
 	}
 	else if (curView == 3) {
-		viewMatrix = duoView->getViewMatrix(planetMatrix[Duo]);
+		viewMatrix = duoView->getViewMatrix(modelMatrix[Duo]);
 		strcpy(viewStr, " Duo View");
 	}
 }
@@ -178,12 +184,12 @@ void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	// update model matrix, set MVP, draw
-	for (int i = 0; i < nPlanets; i++) {
-		planetMatrix[i] = planet[i]->getModelMatrix();
+	for (int i = 0; i < nModels; i++) {
+		modelMatrix[i] = model[i]->getModelMatrix();
 	}
 	camUpdate();
-	for (int i = 0; i < nPlanets; i++) {
-		ModelViewProjectionMatrix = projectionMatrix * viewMatrix * planetMatrix[i]; 
+	for (int i = 0; i < nModels; i++) {
+		ModelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix[i]; 
 		glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix)); 
 		glDrawArrays(GL_TRIANGLES, 0, nVertices);
     }
@@ -206,7 +212,7 @@ void display(void) {
 // timerDelay = 40, or 25 updates / second
 void update (int i) { 
   glutTimerFunc(timerDelay, update, 1);
-  for(int i = 0; i < nPlanets; i++) planet[i] -> update();  
+  for(int i = 0; i < nModels; i++) model[i] -> update();  
   }
 
 // Quit or set the view
