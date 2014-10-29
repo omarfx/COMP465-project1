@@ -35,7 +35,7 @@ int curView = 0;
 
 // display state and "state strings" for title display
 // window title strings
-char baseStr[50] =    "465 manyCubes Example {f, t, r} : ";
+char baseStr[50] =    "Solar system: ";
 char fpsStr[15], viewStr[15] =    " front view";
 char titleStr [100]; 
 
@@ -53,15 +53,6 @@ glm::mat4 ModelViewProjectionMatrix; // set in display();
 glm::vec3 scale[nModels];       // set in init()
 float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f};   // size of model
 GLuint vPosition[nModels], vColor[nModels], vNormal[nModels];   // vPosition, vColor, vNormal handles for models
-
-// vectors for "Planets"
-//glm::vec4 vertex[nVertices];
-//glm::vec3 normal[nVertices];
-//glm::vec4 diffuseColorMaterial[nVertices];
-
-//glm::vec4 shipVertex[shipVertices];
-//glm::vec3 shipNormal[shipVertices];
-//glm::vec4 shipDiffuseColorMaterial[shipVertices];
 
 // rotation variables
 glm::mat4 identity(1.0f); 
@@ -94,15 +85,15 @@ void init(void) {
 
 	printf("Cameras created \n");
 	// create solar system
-	model[Ruber] = new Planet(glm::vec3(2000.0f, 2000.0f, 2000.0f), glm::vec3(0, 0, 0), "Ruber", 4.0);
-	model[Unum] = new Planet(glm::vec3(200.0f, 200.0f, 200.0f), 1.0f, glm::vec3(4000, 0, 0), "Unum", 2.0);
-	model[Duo] = new Planet(glm::vec3(400.0f, 400.0f, 400.0f), 0.5f, glm::vec3(-9000, 0, 0), "Duo", 2.0);
-	model[Primus] = new Planet(glm::vec3(100.0f, 100.0f, 100.0f), 1.0f, glm::vec3(-8100, 0, 0), model[Duo], "Primus", 2.0);
-	model[Secundus] = new Planet(glm::vec3(150.0f, 150.0f, 150.0f), 0.5f, glm::vec3(-7250, 0, 0), model[Duo], "Sucundus", 2.0);
+	model[Ruber] = new Planet(glm::vec3(scale[Ruber]), glm::vec3(0, 0, 0), "Ruber", 4.0);
+	model[Unum] = new Planet(glm::vec3(scale[Unum]), 1.0f, glm::vec3(4000, 0, 0), "Unum", 2.0);
+	model[Duo] = new Planet(glm::vec3(scale[Duo]), 0.5f, glm::vec3(-9000, 0, 0), "Duo", 2.0);
+	model[Primus] = new Planet(glm::vec3(scale[Primus]), 1.0f, glm::vec3(-8100, 0, 0), model[Duo], "Primus", 2.0);
+	model[Secundus] = new Planet(glm::vec3(scale[Secundus]), 0.5f, glm::vec3(-7250, 0, 0), model[Duo], "Sucundus", 2.0);
 
 	printf("%d Planets created \n", (nModels - 1));
 	//create space ship
-    model[Ship] = new SpaceShip(1);
+	model[Ship] = new SpaceShip(glm::vec3(scale[Ship]));
 
 	printf("%d Ship created \n", 1);
 	//create cameras
@@ -184,6 +175,7 @@ void display(void) {
 // Animate scene objects by updating their transformation matrices
 // timerDelay = 40, or 25 updates / second
 void update (int i) { 
+	
   glutTimerFunc(timerDelay, update, 1);
   for(int i = 0; i < nModels; i++) model[i] -> update();  
   }

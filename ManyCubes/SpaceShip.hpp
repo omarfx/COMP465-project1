@@ -13,13 +13,13 @@ private:
 
 public:
 
-	SpaceShip(int number) {
+	SpaceShip(glm::vec3 scale) {
 
 		//rotationMatrix = glm::mat4();
 		
-		scaleMatrix = glm::scale(glm::mat4(), glm::vec3(100, 100, 100));
+		scaleMatrix = glm::scale(glm::mat4(), scale);
 		//radians = glm::radians(1.0f);
-		translationMatrix = glm::translate(glm::mat4(), glm::vec3(1500, 0, 0));
+		translationMatrix = glm::translate(glm::mat4(), glm::vec3(-7250, 0, 0));
 	}
 
 
