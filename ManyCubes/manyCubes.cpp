@@ -6,6 +6,7 @@
 # define Primus 3
 # define Secundus 4
 # define Ship 5
+# define Missle 6
 
 # include "../includes465/include465.hpp"  
 
@@ -32,6 +33,9 @@ int Index =  0;  // global variable indexing into VBO arrays
 
 /* current camera view */
 int curView = 0;
+
+/* current Timer Quantum */
+int timeQuantum = 0;
 
 // display state and "state strings" for title display
 // window title strings
@@ -171,6 +175,23 @@ void display(void) {
 		updateTitle();
 	}
 }
+void updateTimer(int timeQuantum) {
+	switch (timeQuantum)
+	{
+	case (0) :
+		timerDelay = 40;
+		break;
+	case (1) :
+		timerDelay = 100;
+		break;
+	case (2) :
+		timerDelay = 250;
+		break;
+	case (3) :
+		timerDelay = 500;
+		break;
+	}
+}
 
 // Animate scene objects by updating their transformation matrices
 // timerDelay = 40, or 25 updates / second
@@ -208,6 +229,8 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 		/* -- next tq value -- */
 	case 't': case 'T':
+		timeQuantum = (timeQuantum + 1) % 4;
+		updateTimer(timeQuantum);
 		printf("Next TQ value!");
 		break;
 		/* -- next ship speed -- */
