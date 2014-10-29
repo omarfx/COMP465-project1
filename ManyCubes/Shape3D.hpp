@@ -15,4 +15,20 @@ protected:
 
 public:
 	
+	virtual glm::mat4 getTransMatrix() {
+		return translationMatrix;
+	}
+
+	virtual glm::vec3 getTransVec(){
+		 glm::vec3 tempVec;
+		 return tempVec;
+	}
+
+	virtual glm::mat4 getModelMatrix() {
+		return modelMatrix;
+	}
+
+	virtual void update() {
+	}
+	
 };

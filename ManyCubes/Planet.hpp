@@ -46,8 +46,8 @@ public:
 		planetName = name;
 	}
 	//constructor for the moons
-	Planet(glm::vec3 scale, float rads, glm::vec3 trans, Planet * orbitTargetIn, char* name, float spin){
-		orbitTarget = *orbitTargetIn;
+	Planet(glm::vec3 scale, float rads, glm::vec3 trans, Shape3D * orbitTargetIn, char* name, float spin){
+		orbitTarget = (Planet *) orbitTargetIn;
 		glm::mat4 pTransMatrix;
 		rotationMatrix = glm::mat4();  // no initial orientation
 		scaleMatrix = glm::scale(glm::mat4(), scale);

@@ -18,14 +18,14 @@ private:
 
 public:
 
-	Camera(glm::vec3 eyeOffsetIn, glm::vec3 atOffsetIn, glm::vec3 upOffsetIn, Planet * camSubjectIn) {
+	Camera(glm::vec3 eyeOffsetIn, glm::vec3 atOffsetIn, glm::vec3 upOffsetIn, Shape3D * camSubjectIn) {
 
 		
 			eyeOffset = eyeOffsetIn;
 			atOffset = atOffsetIn;
 			upOffset = upOffsetIn;
 			
-			camSubject = camSubjectIn;
+			camSubject = (Planet *) camSubjectIn;
 
 			update();
 	

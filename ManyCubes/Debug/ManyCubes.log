@@ -1,4 +1,4 @@
-﻿Build started 10/28/2014 8:48:58 PM.
+﻿Build started 10/28/2014 10:34:14 PM.
      1>Project "C:\Users\Mike\Documents\Comp465\OpenGL\VS2013\GitRepo\COMP465-project1\ManyCubes\ManyCubes.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_DEPRECATE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt manyCubes.cpp
@@ -18,24 +18,11 @@
          GLM: GLM_GTC_matrix_transform extension included
          GLM: GLM_GTC_quaternion extension included
          GLM: GLM_GTC_type_ptr extension included
-     1>c:\users\mike\documents\comp465\opengl\vs2013\gitrepo\comp465-project1\manycubes\manycubes.cpp(130): error C2664: 'Planet::Planet(const Planet &)' : cannot convert argument 4 from 'Shape3D *' to 'Planet *'
-                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-     1>c:\users\mike\documents\comp465\opengl\vs2013\gitrepo\comp465-project1\manycubes\manycubes.cpp(131): error C2664: 'Planet::Planet(const Planet &)' : cannot convert argument 4 from 'Shape3D *' to 'Planet *'
-                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-     1>c:\users\mike\documents\comp465\opengl\vs2013\gitrepo\comp465-project1\manycubes\manycubes.cpp(139): error C2664: 'Camera::Camera(const Camera &)' : cannot convert argument 4 from 'Shape3D *' to 'Planet *'
-                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-     1>c:\users\mike\documents\comp465\opengl\vs2013\gitrepo\comp465-project1\manycubes\manycubes.cpp(140): error C2664: 'Camera::Camera(const Camera &)' : cannot convert argument 4 from 'Shape3D *' to 'Planet *'
-                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-     1>c:\users\mike\documents\comp465\opengl\vs2013\gitrepo\comp465-project1\manycubes\manycubes.cpp(141): error C2664: 'Camera::Camera(const Camera &)' : cannot convert argument 4 from 'Shape3D *' to 'Planet *'
-                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-     1>c:\users\mike\documents\comp465\opengl\vs2013\gitrepo\comp465-project1\manycubes\manycubes.cpp(142): error C2664: 'Camera::Camera(const Camera &)' : cannot convert argument 4 from 'Shape3D *' to 'Planet *'
-                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-     1>c:\users\mike\documents\comp465\opengl\vs2013\gitrepo\comp465-project1\manycubes\manycubes.cpp(188): error C2039: 'getModelMatrix' : is not a member of 'Shape3D'
-                 c:\users\mike\documents\comp465\opengl\vs2013\gitrepo\comp465-project1\manycubes\shape3d.hpp(6) : see declaration of 'Shape3D'
-     1>c:\users\mike\documents\comp465\opengl\vs2013\gitrepo\comp465-project1\manycubes\manycubes.cpp(215): error C2039: 'update' : is not a member of 'Shape3D'
-                 c:\users\mike\documents\comp465\opengl\vs2013\gitrepo\comp465-project1\manycubes\shape3d.hpp(6) : see declaration of 'Shape3D'
-     1>Done Building Project "C:\Users\Mike\Documents\Comp465\OpenGL\VS2013\GitRepo\COMP465-project1\ManyCubes\ManyCubes.vcxproj" (Build target(s)) -- FAILED.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Mike\Documents\Comp465\OpenGL\VS2013\GitRepo\COMP465-project1\ManyCubes\Debug\ManyCubes.exe" /INCREMENTAL /NOLOGO freeglut.lib glew32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Mike\Documents\Comp465\OpenGL\VS2013\GitRepo\COMP465-project1\ManyCubes\Debug\ManyCubes.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Mike\Documents\Comp465\OpenGL\VS2013\GitRepo\COMP465-project1\ManyCubes\Debug\ManyCubes.lib" /MACHINE:X86 Debug\manyCubes.obj
+         ManyCubes.vcxproj -> C:\Users\Mike\Documents\Comp465\OpenGL\VS2013\GitRepo\COMP465-project1\ManyCubes\Debug\ManyCubes.exe
+     1>Done Building Project "C:\Users\Mike\Documents\Comp465\OpenGL\VS2013\GitRepo\COMP465-project1\ManyCubes\ManyCubes.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:00.60
+Time Elapsed 00:00:00.85

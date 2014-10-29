@@ -5,7 +5,7 @@
 
 //# include "Shape3D.hpp" //Why does this stop my program from building
 
-class SpaceShip : Shape3D{
+class SpaceShip : public Shape3D{
 
 private:
 

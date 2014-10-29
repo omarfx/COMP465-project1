@@ -20,14 +20,13 @@ Camera * unumView;
 Camera * frontView;
 Camera * duoView;
 // Shapes
-const int nModels = 5;
+const int nModels = 6;
 Shape3D * model[nModels];
 // Models for shapes
-char * planetModFile = "cube-1-1-1.tri"; // name of planet model file
-char * shipModFile = "ship.tri"; // name of ship model File
-const GLuint nVertices = 480 * 3;  // 3 vertices per line (surface) of model file  
-const GLuint shipVertices = 515 * 3;
+char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri"}; // name of planet model file
+const int nVertices[nModels] = { 480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3};
 float boundingRadius;  // modelFile's bounding radius
+float modelBR[nModels];
 float shipBoundingRadius;
 int Index =  0;  // global variable indexing into VBO arrays
 
@@ -40,9 +39,8 @@ char baseStr[50] =    "465 manyCubes Example {f, t, r} : ";
 char fpsStr[15], viewStr[15] =    " front view";
 char titleStr [100]; 
 
-GLuint vao;  // VertexArrayObject
-GLuint buffer;
-GLuint shipBuffer;
+GLuint VAO[nModels];      // Vertex Array Objects
+GLuint buffer[nModels];
 GLuint shaderProgram; 
 char * vertexShaderFile = "simpleVertex.glsl";
 char * fragmentShaderFile = "simpleFragment.glsl";
@@ -52,14 +50,18 @@ glm::mat4 modelMatrix[nModels];		// set in display
 glm::mat4 viewMatrix;			// set in keyboard()
 glm::mat4 ModelViewProjectionMatrix; // set in display();
 
-// vectors for "Planets"
-glm::vec4 vertex[nVertices];
-glm::vec3 normal[nVertices];
-glm::vec4 diffuseColorMaterial[nVertices];
+glm::vec3 scale[nModels];       // set in init()
+float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f};   // size of model
+GLuint vPosition[nModels], vColor[nModels], vNormal[nModels];   // vPosition, vColor, vNormal handles for models
 
-glm::vec4 shipVertex[shipVertices];
-glm::vec3 shipNormal[shipVertices];
-glm::vec4 shipDiffuseColorMaterial[shipVertices];
+// vectors for "Planets"
+//glm::vec4 vertex[nVertices];
+//glm::vec3 normal[nVertices];
+//glm::vec4 diffuseColorMaterial[nVertices];
+
+//glm::vec4 shipVertex[shipVertices];
+//glm::vec3 shipNormal[shipVertices];
+//glm::vec4 shipDiffuseColorMaterial[shipVertices];
 
 // rotation variables
 glm::mat4 identity(1.0f); 
@@ -69,51 +71,19 @@ double currentTime, lastTime, timeInterval;
 
 
 void init(void) {
-	boundingRadius = loadTriModel(planetModFile, nVertices, vertex, diffuseColorMaterial, normal);
-	if (boundingRadius == -1.0f) {
-		printf("loadTriModel error:  returned -1.0f \n");
-		exit(1);
-	}
-	else
-		printf("loaded %s model with %7.2f bounding radius \n", planetModFile, boundingRadius);
-
-	shipBoundingRadius = loadTriModel(shipModFile, shipVertices, shipVertex, shipDiffuseColorMaterial, shipNormal);
-	if (shipBoundingRadius == -1.0f) {
-		printf("loadTriModel error:  returned -1.0f \n");
-		exit(1);
-	}
-	else
-		printf("loaded %s model with %7.2f bounding radius \n", shipModFile, shipBoundingRadius);
-
 	shaderProgram = loadShaders(vertexShaderFile, fragmentShaderFile);
 	glUseProgram(shaderProgram);
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	// Create and initialize a buffer object
-	// GLuint buffers;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex) + sizeof(diffuseColorMaterial) + sizeof(normal), NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertex), vertex);
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertex), sizeof(diffuseColorMaterial), diffuseColorMaterial);
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertex) + sizeof(diffuseColorMaterial), sizeof(normal), normal);
-
-
-	// set up vertex arrays (after shaders are loaded)
-	GLuint vPosition = glGetAttribLocation(shaderProgram, "vPosition");
-	glEnableVertexAttribArray(vPosition);
-	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-
-	GLuint vColor = glGetAttribLocation(shaderProgram, "vColor");
-	glEnableVertexAttribArray(vColor);
-	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vertex)));
-
-	// Normal code is here for later use with lighting and shaders
-	GLuint vNormal = glGetAttribLocation(shaderProgram, "vNormal");
-	glEnableVertexAttribArray(vNormal);
-	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(vertex) + sizeof(diffuseColorMaterial)));
+	// generate VAOs and VBOs
+	glGenVertexArrays(nModels, VAO);
+	glGenBuffers(nModels, buffer);
+	// load the buffers from the model files
+	for (int i = 0; i < nModels; i++) {
+		modelBR[i] = loadModelBuffer(modelFile[i], nVertices[i], VAO[i], buffer[i], shaderProgram,
+			vPosition[i], vColor[i], vNormal[i], "vPosition", "vColor", "vNormal");
+		// set scale for models given bounding radius  
+		scale[i] = glm::vec3(modelSize[i] * 1.0f / modelBR[i]);
+	}
 
 	MVP = glGetUniformLocation(shaderProgram, "ModelViewProjection");
 
@@ -132,7 +102,7 @@ void init(void) {
 
 	printf("%d Planets created \n", (nModels - 1));
 	//create space ship
-	//model[Ship] = new SpaceShip(1);
+    model[Ship] = new SpaceShip(1);
 
 	printf("%d Ship created \n", 1);
 	//create cameras
@@ -185,13 +155,16 @@ void display(void) {
 	
 	// update model matrix, set MVP, draw
 	for (int i = 0; i < nModels; i++) {
-		modelMatrix[i] = model[i]->getModelMatrix();
+		modelMatrix[i] =  model[i]->getModelMatrix();
 	}
 	camUpdate();
 	for (int i = 0; i < nModels; i++) {
 		ModelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix[i]; 
 		glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix)); 
-		glDrawArrays(GL_TRIANGLES, 0, nVertices);
+		
+		glBindVertexArray(VAO[i]);
+
+		glDrawArrays(GL_TRIANGLES, 0, nVertices[i]);
     }
 
 	glutSwapBuffers();
