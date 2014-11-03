@@ -8,6 +8,13 @@
 # define Ship 5
 # define Missle 6
 
+#define YAW_RIGHT 0
+#define YAW_LEFT 1
+#define PITCH_FORWARD 2
+#define PITCH_BACKWARD 3
+#define ROLL_RIGHT 4
+#define ROLL_LEFT 5
+
 # include "../includes465/include465.hpp"  
 
 # include "Planet.hpp"
@@ -255,34 +262,29 @@ void specialKeyboard(int key, int x, int y) {
 		/* -- move left -- */
 	case GLUT_KEY_LEFT:
 		if (glutGetModifiers() == GLUT_ACTIVE_CTRL) {
-			printf("Roll left!");
+			model[Ship]->move(ROLL_LEFT);
 		}
-		else {
-			printf("Move left!");
-			model[Ship]->move(1);
-		} break;
+		else
+			model[Ship]->move(YAW_LEFT);
+		break;
 		/* -- move forward -- */
 	case GLUT_KEY_UP:
-		if (glutGetModifiers() == GLUT_ACTIVE_CTRL) {
-			printf("Pitch forward!");
-		}
+		if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
+			model[Ship]->move(PITCH_FORWARD);
 		else {
 			printf("Move forward!");
 		} break;
 		/* -- move right -- */
 	case GLUT_KEY_RIGHT:
-		if (glutGetModifiers() == GLUT_ACTIVE_CTRL) {
-			printf("Roll right!");
-		}
-		else {
-			printf("Move right!");
-			model[Ship]->move(0);
-		} break;
+		if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
+			model[Ship]->move(ROLL_RIGHT);
+		else
+			model[Ship]->move(YAW_RIGHT);
+		break;
 		/* -- move down -- */
 	case GLUT_KEY_DOWN:
-		if (glutGetModifiers() == GLUT_ACTIVE_CTRL) {
-			printf("Pitch backward!");
-		}
+		if (glutGetModifiers() == GLUT_ACTIVE_CTRL) 
+			model[Ship]->move(PITCH_BACKWARD);
 		else {
 			printf("Move backward!");
 		} break;
