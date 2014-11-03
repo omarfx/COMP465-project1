@@ -19,6 +19,7 @@ Camera * topView;
 Camera * unumView;
 Camera * frontView;
 Camera * duoView;
+Camera * shipCam;
 // Shapes
 const int nModels = 6;
 Shape3D * model[nModels];
@@ -97,10 +98,11 @@ void init(void) {
 
 	printf("%d Ship created \n", 1);
 	//create cameras
-	frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), model[Ruber]);
-	topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), model[Ruber]);
-	unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), model[Unum]);
-	duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), model[Duo]);
+	frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Front
+	topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); //Top
+	unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); //Unum
+	duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));  //Duo
+	shipCam = new Camera(glm::vec3(0.0f, 300.0f, 1000.0f), glm::vec3(0.0f, 200.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
 }
@@ -137,6 +139,10 @@ void camUpdate(void){
 	else if (curView == 3) {
 		viewMatrix = duoView->getViewMatrix(modelMatrix[Duo]);
 		strcpy(viewStr, " Duo View");
+	}
+	else if (curView == 4) {
+		viewMatrix = shipCam->getViewMatrix(modelMatrix[Ship]);
+		strcpy(viewStr, " Ship View");
 	}
 }
 
@@ -204,7 +210,7 @@ void keyboard(unsigned char key, int x, int y) {
 		/* -- camera view -- */
 	case 'v': case 'V':
 		/* -- evaluate view -- */
-		curView = (curView + 1) % 4;
+		curView = (curView + 1) % 5;
 		break;
 		/* -- next tq value -- */
 	case 't': case 'T':
@@ -230,6 +236,7 @@ void specialKeyboard(int key, int x, int y) {
 		}
 		else {
 			printf("Move left!");
+			model[Ship]->move(1);
 		} break;
 		/* -- move forward -- */
 	case GLUT_KEY_UP:
@@ -246,6 +253,7 @@ void specialKeyboard(int key, int x, int y) {
 		}
 		else {
 			printf("Move right!");
+			model[Ship]->move(0);
 		} break;
 		/* -- move down -- */
 	case GLUT_KEY_DOWN:

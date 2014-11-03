@@ -97,6 +97,6 @@ public:
 
 	void update() {
 		
-		rotationMatrix = glm::rotate(rotationMatrix, radians, rotationAxis);
+		rotationMatrix = glm::rotate(rotationMatrix, radians, yRotationAxis);
 	}
 };

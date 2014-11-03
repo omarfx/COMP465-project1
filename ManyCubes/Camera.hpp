@@ -13,19 +13,20 @@ private:
 	glm::mat4 viewMatrix;
 	glm::vec3 eye, at, up, eyeOffset, atOffset, upOffset;
 	glm::mat4 tempTransMatrix;
-	Planet * camSubject;
+	Planet * camPlanet;
+	SpaceShip * camShip;
+
 
 
 public:
 
-	Camera(glm::vec3 eyeOffsetIn, glm::vec3 atOffsetIn, glm::vec3 upOffsetIn, Shape3D * camSubjectIn) {
+	Camera(glm::vec3 eyeOffsetIn, glm::vec3 atOffsetIn, glm::vec3 upOffsetIn) {
 
 		
 			eyeOffset = eyeOffsetIn;
 			atOffset = atOffsetIn;
 			upOffset = upOffsetIn;
 			
-			camSubject = (Planet *) camSubjectIn;
 
 			update();
 	
