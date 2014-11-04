@@ -3,14 +3,15 @@
 # define __INCLUDES465__
 # endif
 
-#define YAW_RIGHT 0
-#define YAW_LEFT 1
-#define PITCH_FORWARD 2
-#define PITCH_BACKWARD 3
-#define ROLL_RIGHT 4
-#define ROLL_LEFT 5
+# ifndef __SHAPE3D__
+# include "Shape3D.hpp"
+# define __SHAPE3D__
+# endif
 
-//# include "Shape3D.hpp" //Why does this stop my program from building
+# ifndef __DEFINES__
+# include "Defines.hpp"
+# define __DEFINES__
+# endif
 
 class SpaceShip : public Shape3D{
 
@@ -59,6 +60,9 @@ public:
 			rotationMatrix = glm::rotate(rotationMatrix, -zRadians, zRotationAxis);
 			break;
 		case ROLL_LEFT:
+			rotationMatrix = glm::rotate(rotationMatrix, zRadians, zRotationAxis);
+			break;
+		case THRUST_FOREWARD:
 			rotationMatrix = glm::rotate(rotationMatrix, zRadians, zRotationAxis);
 			break;
 		}

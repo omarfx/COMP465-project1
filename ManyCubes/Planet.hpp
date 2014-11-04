@@ -14,7 +14,11 @@ Mike Barnes
 # define __INCLUDES465__
 # endif
 
+# ifndef __SHAPE3D__
 # include "Shape3D.hpp"
+# define __SHAPE3D__
+# endif
+
 
 class Planet : public Shape3D{
 

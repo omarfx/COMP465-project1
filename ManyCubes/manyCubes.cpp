@@ -1,19 +1,10 @@
 
 # define __Windows__ // define your target operating system
-# define Ruber 0
-# define Unum 1
-# define Duo 2
-# define Primus 3
-# define Secundus 4
-# define Ship 5
-# define Missle 6
 
-#define YAW_RIGHT 0
-#define YAW_LEFT 1
-#define PITCH_FORWARD 2
-#define PITCH_BACKWARD 3
-#define ROLL_RIGHT 4
-#define ROLL_LEFT 5
+# ifndef __DEFINES__
+# include "Defines.hpp"
+# define __DEFINES__
+# endif
 
 # include "../includes465/include465.hpp"  
 
@@ -157,6 +148,20 @@ void camUpdate(void){
 	}
 }
 
+void printMat4(glm::mat4 matIn){ 
+	          
+	int i = 0;
+	int j = 0;
+	
+	printf("\n");
+	for (; i < 4; i++){
+		for (j = 0; j < 4; j++)
+			printf("%d   ", matIn[j][i]);
+		printf("\n");
+	}
+	printf("\n");
+}
+
 void display(void) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -164,6 +169,11 @@ void display(void) {
 	// update model matrix, set MVP, draw
 	for (int i = 0; i < nModels; i++) {
 		modelMatrix[i] =  model[i]->getModelMatrix();
+	
+		//if (i == Unum) //debugging Mike
+			//printMat4(modelMatrix[i]);
+		
+
 	}
 	camUpdate();
 	for (int i = 0; i < nModels; i++) {
