@@ -1,16 +1,6 @@
-# ifndef __INCLUDES465__
-# include "../includes465/include465.hpp"
-# define __INCLUDES465__
-# endif
-
 # ifndef __SHAPE3D__
 # include "Shape3D.hpp"
 # define __SHAPE3D__
-# endif
-
-# ifndef __DEFINES__
-# include "Defines.hpp"
-# define __DEFINES__
 # endif
 
 class SpaceShip : public Shape3D{
@@ -20,6 +10,8 @@ private:
 	float xRadians = 0.02f;
 	float yRadians = 0.02f;
 	float zRadians = 0.02f;
+	float thrust = 1.0f;
+	glm::mat4 thrustTranslate = glm::mat4();
 
 public:
 
@@ -35,11 +27,29 @@ public:
 
 
 	glm::mat4 getModelMatrix() {
-			return(translationMatrix * rotationMatrix * scaleMatrix);
+
+		translationMatrix = translationMatrix * thrustTranslate;
+		modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
+		thrustTranslate = glm::mat4();
+		return(modelMatrix);
 	}
 
 	void update() {
 		
+	}
+
+	void printMat4(glm::mat4 matIn){
+
+		int i = 0;
+		int j = 0;
+
+		printf("\n");
+		for (; i < 4; i++){
+			for (j = 0; j < 4; j++)
+				printf("%d   ", matIn[j][i]);
+			printf("\n");
+		}
+		printf("\n");
 	}
 
 	void move(int movement){
@@ -63,9 +73,14 @@ public:
 			rotationMatrix = glm::rotate(rotationMatrix, zRadians, zRotationAxis);
 			break;
 		case THRUST_FOREWARD:
-			rotationMatrix = glm::rotate(rotationMatrix, zRadians, zRotationAxis);
+			thrustTranslate = glm::translate(glm::mat4(), getIn(modelMatrix) * thrust);
+			break;
+		case THRUST_BACKWARD:
+			thrustTranslate = glm::translate(glm::mat4(), getIn(modelMatrix) * -thrust);
 			break;
 		}
+
+		//printMat4(rotationMatrix);
 		
 	}
 };

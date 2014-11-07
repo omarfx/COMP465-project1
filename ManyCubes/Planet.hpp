@@ -9,11 +9,6 @@ Mike Barnes
 8/24/2014
 */
 
-# ifndef __INCLUDES465__
-# include "../includes465/include465.hpp"
-# define __INCLUDES465__
-# endif
-
 # ifndef __SHAPE3D__
 # include "Shape3D.hpp"
 # define __SHAPE3D__
@@ -84,19 +79,19 @@ public:
 
 	glm::mat4 getModelMatrix() {
 
-		if (!isAMoon){
+		if (isTheSun)
+			return(translationMatrix * rotationMatrix * scaleMatrix);
+		else if (!isAMoon){
 			modelMatrix = rotationMatrix * translationMatrix * scaleMatrix;
 			return modelMatrix;
 		}
-		else if (isAMoon){
+		else{
 			glm::mat4  pTransMatrix;
 			glm::vec3 trans = orbitTarget->getTransVec();
 			
 			pTransMatrix = glm::translate(glm::mat4(), trans);
 			return(pTransMatrix * rotationMatrix * translationMatrix * scaleMatrix);
 		}
-		else
-			return(translationMatrix * rotationMatrix * scaleMatrix);
 	}
 
 	void update() {

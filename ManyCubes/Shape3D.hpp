@@ -3,6 +3,12 @@
 # define __INCLUDES465__
 # endif
 
+# ifndef __DEFINES__
+# include "Defines.hpp"
+# define __DEFINES__
+# endif
+
+
 class Shape3D{
 
 protected:
@@ -10,7 +16,7 @@ protected:
 	glm::mat4 scaleMatrix; //size
 	glm::mat4 translationMatrix;//position (x,y,z)
 	glm::mat4 translate; //where to move to
-	glm::mat4 modelMatrix; //hold the value of a planets matrix so it does not have to recalculated later
+	glm::mat4 modelMatrix; //hold the value of a models matrix so it does not have to recalculated later
 	
 	//Axis' of rotation
 	glm::vec3 xRotationAxis = glm::vec3(1, 0, 0);

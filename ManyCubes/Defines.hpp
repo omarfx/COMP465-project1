@@ -13,3 +13,4 @@
 #define ROLL_RIGHT 4
 #define ROLL_LEFT 5
 #define THRUST_FOREWARD 6
+#define THRUST_BACKWARD 7
