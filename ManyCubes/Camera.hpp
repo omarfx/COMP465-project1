@@ -26,10 +26,6 @@ public:
 			eyeOffset = eyeOffsetIn;
 			atOffset = atOffsetIn;
 			upOffset = upOffsetIn;
-			
-
-			update();
-	
 	}
 
 	glm::mat4 getViewMatrix(glm::mat4 subPos) {

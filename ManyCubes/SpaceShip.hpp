@@ -17,10 +17,8 @@ public:
 
 	SpaceShip(glm::vec3 scale) {
 
-		//rotationMatrix = glm::mat4();
-		
+		rotationMatrix = glm::mat4();
 		scaleMatrix = glm::scale(glm::mat4(), scale);
-		//radians = glm::radians(1.0f);
 		translationMatrix = glm::translate(glm::mat4(), glm::vec3(-7250, 0, 0));
 	}
 
@@ -76,7 +74,7 @@ public:
 			thrustTranslate = glm::translate(glm::mat4(), getIn(modelMatrix) * thrust);
 			break;
 		case THRUST_BACKWARD:
-			thrustTranslate = glm::translate(glm::mat4(), getIn(modelMatrix) * -thrust);
+			thrustTranslate = glm::translate(glm::mat4(), getOut(modelMatrix) * thrust);
 			break;
 		}
 

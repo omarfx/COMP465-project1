@@ -7,6 +7,7 @@
 # include "Planet.hpp"
 # include "SpaceShip.hpp"
 # include "Camera.hpp"
+# include "ShipCamera.hpp"
 //# include "Shape3D.hpp"
 
 //Cameras
@@ -14,14 +15,13 @@ Camera * topView;
 Camera * unumView;
 Camera * frontView;
 Camera * duoView;
-Camera * shipCam;
+ShipCamera * shipCam;
 // Shapes
 const int nModels = 6;
 Shape3D * model[nModels]; // objects for shapes
 char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri"}; // name of planet model file
 const int nVertices[nModels] = { 480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3};
 float modelBR[nModels]; // modelFile's bounding radius
-int Index =  0;  // global variable indexing into VBO arrays
 
 /* current camera view */
 int curView = 0;
@@ -97,7 +97,7 @@ void init(void) {
 	topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); //Top
 	unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); //Unum
 	duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));  //Duo
-	shipCam = new Camera(glm::vec3(0.0f, 300.0f, 1000.0f), glm::vec3(0.0f, 200.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	shipCam = new ShipCamera(glm::vec3(0.0f, 300.0f, 1000.0f), glm::vec3(0.0f, 200.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
 }
@@ -158,15 +158,10 @@ void printMat4(glm::mat4 matIn){
 void display(void) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	// update model matrix, set MVP, draw
 	for (int i = 0; i < nModels; i++) {
-		modelMatrix[i] =  model[i]->getModelMatrix();
-	
-		//if (i == Unum) //debugging Mike
-			//printMat4(modelMatrix[i]);
-		
-
+		modelMatrix[i] = model[i]->getModelMatrix();
 	}
 	camUpdate();
 	for (int i = 0; i < nModels; i++) {
@@ -288,10 +283,9 @@ void specialKeyboard(int key, int x, int y) {
 	case GLUT_KEY_DOWN:
 		if (glutGetModifiers() == GLUT_ACTIVE_CTRL) 
 			model[Ship]->move(PITCH_BACKWARD);
-		else {
+		else 
 			model[Ship]->move(THRUST_BACKWARD);
-			printf("Move backward!");
-		} break;
+		break;
 	}
 }
     
