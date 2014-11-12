@@ -4,7 +4,8 @@
 # define Primus 3
 # define Secundus 4
 # define Ship 5
-# define Missle 6
+# define TurretUnum 6
+# define TurretDuo 7
 
 #define YAW_RIGHT 0
 #define YAW_LEFT 1
