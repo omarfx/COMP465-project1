@@ -82,14 +82,14 @@ void init(void) {
 	printf("Cameras created \n");
 	// create solar system
 	model[Ruber] = new Planet(glm::vec3(scale[Ruber]), glm::vec3(0, 0, 0), "Ruber", 4.0);
-	model[Unum] = new Planet(glm::vec3(scale[Unum]), 1.0f, glm::vec3(4000, 0, 0), "Unum", 2.0);
-	model[Duo] = new Planet(glm::vec3(scale[Duo]), 0.5f, glm::vec3(-9000, 0, 0), "Duo", 2.0);
-	model[Primus] = new Planet(glm::vec3(scale[Primus]), 1.0f, glm::vec3(-8100, 0, 0), model[Duo], "Primus", 2.0);
-	model[Secundus] = new Planet(glm::vec3(scale[Secundus]), 0.5f, glm::vec3(-7250, 0, 0), model[Duo], "Sucundus", 2.0);
+	model[Unum] = new Planet(glm::vec3(scale[Unum]), 0.004f, glm::vec3(4000, 0, 0), "Unum", 2.0);
+	model[Duo] = new Planet(glm::vec3(scale[Duo]), 0.002f, glm::vec3(-9000, 0, 0), "Duo", 2.0);
+	model[Primus] = new Planet(glm::vec3(scale[Primus]), 0.004f, glm::vec3(-8100, 0, 0), model[Duo], "Primus", 2.0);
+	model[Secundus] = new Planet(glm::vec3(scale[Secundus]), 0.002f, glm::vec3(-7250, 0, 0), model[Duo], "Sucundus", 2.0);
 
 	printf("%d Planets created \n", (nModels - 1));
 	//create space ship
-	model[Ship] = new SpaceShip(glm::vec3(scale[Ship]));
+	model[Ship] = new SpaceShip(glm::vec3(scale[Ship]), model[Ruber]);
 
 	printf("%d Ship created \n", 1);
 	//create cameras
@@ -160,6 +160,7 @@ void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// update model matrix, set MVP, draw
+
 	for (int i = 0; i < nModels; i++) {
 		modelMatrix[i] = model[i]->getModelMatrix();
 	}

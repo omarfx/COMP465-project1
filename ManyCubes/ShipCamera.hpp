@@ -17,8 +17,7 @@ class ShipCamera //: public Camera
 private:
 
 	glm::mat4 viewMatrix;
-	glm::vec3 eye, at, up, eyeOffset, atOffset, upOffset;
-	glm::mat4 tempTransMatrix;
+	glm::vec3 eyeOffset, atOffset, upOffset;
 	Planet * camPlanet;
 	SpaceShip * camShip;
 
@@ -28,16 +27,13 @@ public:
 
 	ShipCamera(glm::vec3 eyeOffsetIn, glm::vec3 atOffsetIn, glm::vec3 upOffsetIn) {
 
-
-		eyeOffset = eyeOffsetIn;
-		atOffset = atOffsetIn;
-		upOffset = upOffsetIn;
 	}
 
 
 	glm::mat4 getViewMatrix(glm::mat4 subPos){
+		
 		glm::mat4 temp;
-
+		glm::vec3 eye, at, up;
 		float camBack = 40.0;
 		float camUp = 20.0;
 		

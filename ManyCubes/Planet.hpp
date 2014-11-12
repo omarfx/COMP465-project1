@@ -86,7 +86,7 @@ public:
 			return modelMatrix;
 		}
 		else{
-			glm::mat4  pTransMatrix;
+			glm::mat4  pTransMatrix;// = glm::translate();
 			glm::vec3 trans = orbitTarget->getTransVec();
 			
 			pTransMatrix = glm::translate(glm::mat4(), trans);
