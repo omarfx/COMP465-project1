@@ -6,6 +6,7 @@
 # include "Defines.hpp"
 # include "Planet.hpp"
 # include "SpaceShip.hpp"
+# include "Turret.hpp"
 # include "Camera.hpp"
 # include "ShipCamera.hpp"
 //# include "Shape3D.hpp"
@@ -17,10 +18,10 @@ Camera * frontView;
 Camera * duoView;
 ShipCamera * shipCam;
 // Shapes
-const int nModels = 6;
+const int nModels = 8;
 Shape3D * model[nModels]; // objects for shapes
-char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri"}; // name of planet model file
-const int nVertices[nModels] = { 480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3};
+char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri", "turret.tri", "turret.tri"}; // name of planet model file
+const int nVertices[nModels] = { 480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3, 492 * 3, 492 * 3 };
 float modelBR[nModels]; // modelFile's bounding radius
 
 /* current camera view */
@@ -47,7 +48,7 @@ glm::mat4 viewMatrix;			// set in keyboard()
 glm::mat4 ModelViewProjectionMatrix; // set in display();
 
 glm::vec3 scale[nModels];       // set in init()
-float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f};   // size of model
+float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f, 200.0f, 200.0f};   // size of model
 GLuint vPosition[nModels], vColor[nModels], vNormal[nModels];   // vPosition, vColor, vNormal handles for models
 
 // rotation variables
@@ -79,25 +80,30 @@ void init(void) {
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	printf("Cameras created \n");
 	// create solar system
 	model[Ruber] = new Planet(glm::vec3(scale[Ruber]), glm::vec3(0, 0, 0), "Ruber", 4.0);
 	model[Unum] = new Planet(glm::vec3(scale[Unum]), 1.0f, glm::vec3(4000, 0, 0), "Unum", 2.0);
 	model[Duo] = new Planet(glm::vec3(scale[Duo]), 0.5f, glm::vec3(-9000, 0, 0), "Duo", 2.0);
 	model[Primus] = new Planet(glm::vec3(scale[Primus]), 1.0f, glm::vec3(-8100, 0, 0), model[Duo], "Primus", 2.0);
 	model[Secundus] = new Planet(glm::vec3(scale[Secundus]), 0.5f, glm::vec3(-7250, 0, 0), model[Duo], "Sucundus", 2.0);
+	printf("%d Planets created \n", (nModels - 2));
 
-	printf("%d Planets created \n", (nModels - 1));
 	//create space ship
 	model[Ship] = new SpaceShip(glm::vec3(scale[Ship]));
-
 	printf("%d Ship created \n", 1);
+
+	// create turrets
+	model[TurretUnum] = new Turret(glm::vec3(scale[TurretUnum]), glm::vec3(4000, 0, 0), "TurretUnum");
+	model[TurretSecundus] = new Turret(glm::vec3(scale[TurretSecundus]), glm::vec3(-7250, 0, 0), "TurretUnum");
+	printf("%d Turrets created \n", 1);
+
 	//create cameras
 	frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Front
 	topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); //Top
 	unumView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); //Unum
 	duoView = new Camera(glm::vec3(0.0f, 4000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));  //Duo
 	shipCam = new ShipCamera(glm::vec3(0.0f, 300.0f, 1000.0f), glm::vec3(0.0f, 200.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	printf("Cameras created \n");
 
 	lastTime = glutGet(GLUT_ELAPSED_TIME);  // get elapsed system time
 }
