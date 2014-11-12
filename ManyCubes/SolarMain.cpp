@@ -48,7 +48,7 @@ glm::mat4 viewMatrix;			// set in keyboard()
 glm::mat4 ModelViewProjectionMatrix; // set in display();
 
 glm::vec3 scale[nModels];       // set in init()
-float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f, 200.0f, 200.0f};   // size of model
+float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f, 300.0f, 600.0f};   // size of model
 GLuint vPosition[nModels], vColor[nModels], vNormal[nModels];   // vPosition, vColor, vNormal handles for models
 
 // rotation variables
@@ -86,15 +86,15 @@ void init(void) {
 	model[Duo] = new Planet(glm::vec3(scale[Duo]), 0.5f, glm::vec3(-9000, 0, 0), "Duo", 2.0);
 	model[Primus] = new Planet(glm::vec3(scale[Primus]), 1.0f, glm::vec3(-8100, 0, 0), model[Duo], "Primus", 2.0);
 	model[Secundus] = new Planet(glm::vec3(scale[Secundus]), 0.5f, glm::vec3(-7250, 0, 0), model[Duo], "Sucundus", 2.0);
-	printf("%d Planets created \n", (nModels - 2));
+	printf("%d Planets created \n", (nModels - 3));
 
 	//create space ship
 	model[Ship] = new SpaceShip(glm::vec3(scale[Ship]));
 	printf("%d Ship created \n", 1);
 
 	// create turrets
-	model[TurretUnum] = new Turret(glm::vec3(scale[TurretUnum]), glm::vec3(4000, 0, 0), "TurretUnum");
-	model[TurretSecundus] = new Turret(glm::vec3(scale[TurretSecundus]), glm::vec3(-7250, 0, 0), "TurretUnum");
+	model[TurretUnum] = new Turret(glm::vec3(scale[TurretUnum]), glm::vec3(4000, 0, 0), model[Unum], 150);
+	model[TurretDuo] = new Turret(glm::vec3(scale[TurretDuo]), glm::vec3(-7250, 0, 0), model[Duo], 300);
 	printf("%d Turrets created \n", 1);
 
 	//create cameras

@@ -5,7 +5,7 @@
 # define Secundus 4
 # define Ship 5
 # define TurretUnum 6
-# define TurretSecundus 7
+# define TurretDuo 7
 
 #define YAW_RIGHT 0
 #define YAW_LEFT 1
