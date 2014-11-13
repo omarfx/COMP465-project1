@@ -8,7 +8,6 @@
 # define __DEFINES__
 # endif
 
-
 class Shape3D{
 
 protected:
@@ -43,6 +42,10 @@ public:
 	}
 
 	virtual void move(int movement){
+	}
+
+	virtual void fireMissile(float speed, Shape3D * target){
+
 	}
 	
 };

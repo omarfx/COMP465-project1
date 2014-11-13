@@ -1,23 +1,9 @@
 
 # define __Windows__ // define your target operating system
 
-# include "../includes465/include465.hpp"  
-
-#include  "Turret.hpp"
-# include "Defines.hpp"
-
-# ifndef __PLANET__
-# include "Planet.hpp"
-# define __PLANET__
-# endif
-
-# include "SpaceShip.hpp"
-# include "Camera.hpp"
-# include "ShipCamera.hpp"
-
-# ifndef __SHAPE3D__
-# include "Camera.hpp"
-# define __SHAPE3D__
+# ifndef __OURINCLUDES__
+# include "OurIncludes.hpp"
+# define __OURINCLUDES__
 # endif
 
 //Cameras
@@ -27,10 +13,10 @@ Camera * frontView;
 Camera * duoView;
 ShipCamera * shipCam;
 // Shapes
-const int nModels = 8;
+const int nModels = 10;
 Shape3D * model[nModels]; // objects for shapes
-char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri", "turret.tri", "turret.tri"}; // name of planet model file
-const int nVertices[nModels] = { 480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3, 492 * 3, 492 * 3};
+char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri", "turret.tri", "turret.tri", "missile.tri", "missile.tri"}; // name of planet model file
+const int nVertices[nModels] = {480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3, 492 * 3, 492 * 3, 384 * 3, 384 * 3};
 float modelBR[nModels]; // modelFile's bounding radius
 
 /* current camera view */
@@ -58,7 +44,7 @@ glm::mat4 ModelViewProjectionMatrix; // set in display();
 
 glm::vec3 scale[nModels];       // set in init()
 
-float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f, 300.0f, 600.0f};   // size of model
+float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f, 300.0f, 600.0f, 25.0f, 25.0f};   // size of model
 
 GLuint vPosition[nModels], vColor[nModels], vNormal[nModels];   // vPosition, vColor, vNormal handles for models
 
@@ -108,6 +94,12 @@ void init(void) {
 	model[TurretUnum] = new Turret(glm::vec3(scale[TurretUnum]), glm::vec3(4000, 0, 0), model[Unum], 150);
 	model[TurretDuo] = new Turret(glm::vec3(scale[TurretDuo]), glm::vec3(-7250, 0, 0), model[Duo], 300);
 	printf("%d Turrets created \n", 1);
+
+	//create missiles
+	model[MissileShip] = new ShipMissile(scale[MissileShip], model[Ship]);
+	model[MissileTurret] = new TurretMissile(scale[MissileTurret], model[Ship]);
+
+
 
 	printf("%d Ship created \n", 1);
 	//create cameras

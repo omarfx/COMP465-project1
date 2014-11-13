@@ -1,9 +1,18 @@
 /*class accepts a number of variables at time of creation to
   define a camera and can return a given cameras view matrix*/
-
 # ifndef __INCLUDES465__
 # include "../includes465/include465.hpp"
 # define __INCLUDES465__
+# endif
+
+# ifndef __PLANET__
+# include "Planet.hpp"
+# define __PLANET__
+# endif
+
+# ifndef __SHIP__
+# include "SpaceShip.hpp"
+# define __SHIP__
 # endif
 
 class Camera {

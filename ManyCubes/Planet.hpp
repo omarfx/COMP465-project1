@@ -9,11 +9,15 @@ Mike Barnes
 8/24/2014
 */
 
+# ifndef __INCLUDES465__
+# include "../includes465/include465.hpp"
+# define __INCLUDES465__
+# endif
+
 # ifndef __SHAPE3D__
 # include "Shape3D.hpp"
 # define __SHAPE3D__
 # endif
-
 
 class Planet : public Shape3D{
 

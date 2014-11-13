@@ -1,16 +1,11 @@
-/*
-Shape3D.cpp
+# ifndef __INCLUDES465__
+# include "../includes465/include465.hpp"
+# define __INCLUDES465__
+# endif
 
-Represent the scale, translation, and rotation of a 3D shape.
-If you overload the constructor you can create a shape with
-arguments for scale, translation, and rotation.
-
-Mike Barnes
-8/24/2014
-*/
-# ifndef __PLANET__
-# include "Planet.hpp"
-# define __PLANET__
+# ifndef __DEFINES__
+# include "Defines.hpp"
+# define __DEFINES__
 # endif
 
 # ifndef __SHAPE3D__
@@ -18,6 +13,10 @@ Mike Barnes
 # define __SHAPE3D__
 # endif
 
+# ifndef __PLANET__
+# include "Planet.hpp"
+# define __PLANET__
+# endif
 
 class Turret : public Shape3D {
 
@@ -53,14 +52,14 @@ public:
 	void update() {
 
 		// lift the turret to the top of the surface
-		glm::mat4 liftTransMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, lift, 0.0f));
+		//glm::mat4 liftTransMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, lift, 0.0f));
 
 		// make the turret follow the planet
 		glm::vec3 transVec = followTarget->getTransVec();
-		glm::mat4 followTransMatrix = glm::translate(glm::mat4(1.0f), transVec);
+		glm::mat4 followTransMatrix = glm::translate(glm::mat4(1.0f), transVec + glm::vec3(0.0f, lift, 0.0f));
 
 		// move the turret to the proper spot
-		translationMatrix = followTransMatrix * liftTransMatrix;
+		translationMatrix = followTransMatrix; //* liftTransMatrix;
 
 	}
 

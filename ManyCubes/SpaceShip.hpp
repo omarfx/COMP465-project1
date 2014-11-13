@@ -3,6 +3,21 @@
 # define __SHAPE3D__
 # endif
 
+# ifndef __DEFINES__
+# include "Defines.hpp"
+# define __DEFINES__
+# endif
+
+# ifndef __INCLUDES465__
+# include "../includes465/include465.hpp"
+# define __INCLUDES465__
+# endif
+
+# ifndef __PLANET__
+# include "Planet.hpp"
+# define __PLANET__
+# endif
+
 class SpaceShip : public Shape3D{
 
 private:
@@ -87,7 +102,7 @@ public:
 			gravForce = 90000000.0f / (dist*dist);
 			gravVec = glm::normalize(getPosition(translationMatrix)) * -gravForce;
 			//printf("\n%f", gravForce);
-			thrustTranslate = glm::translate(glm::mat4(), getOut(modelMatrix) * thrust + gravVec);
+			thrustTranslate = glm::translate(glm::mat4(), glm::normalize(getOut(modelMatrix)) * thrust + gravVec);
 			break;
 		}
 		
