@@ -1,3 +1,11 @@
+/*
+ * Mike Landers
+ * Ross Fahan
+ * Chris Eng
+ * COMP465
+ * Fall 2014
+ */
+
 # ifndef __DEFINES__
 # include "Defines.hpp"
 # define __DEFINES__

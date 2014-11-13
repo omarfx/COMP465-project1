@@ -1,4 +1,12 @@
 /*
+ * Mike Landers
+ * Ross Fahan
+ * Chris Eng
+ * COMP465
+ * Fall 2014
+ */
+
+/*
 Shape3D.cpp
 
 Represent the scale, translation, and rotation of a 3D shape.

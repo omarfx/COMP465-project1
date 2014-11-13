@@ -1,3 +1,11 @@
+/*
+ * Mike Landers
+ * Ross Fahan
+ * Chris Eng
+ * COMP465
+ * Fall 2014
+ */
+
 # ifndef __SHAPE3D__
 # include "Shape3D.hpp"
 # define __SHAPE3D__

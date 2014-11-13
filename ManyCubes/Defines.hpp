@@ -1,3 +1,11 @@
+/*
+ * Mike Landers
+ * Ross Fahan
+ * Chris Eng
+ * COMP465
+ * Fall 2014
+ */
+
 # define Ruber 0
 # define Unum 1
 # define Duo 2

@@ -1,5 +1,14 @@
+/*
+ * Mike Landers
+ * Ross Fahan
+ * Chris Eng
+ * COMP465
+ * Fall 2014
+ */
+
 /*class accepts a number of variables at time of creation to
   define a camera and can return a given cameras view matrix*/
+
 # ifndef __INCLUDES465__
 # include "../includes465/include465.hpp"
 # define __INCLUDES465__

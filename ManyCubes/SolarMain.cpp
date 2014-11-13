@@ -1,3 +1,10 @@
+/*
+ * Mike Landers
+ * Ross Fahan
+ * Chris Eng
+ * COMP465
+ * Fall 2014
+ */
 
 # define __Windows__ // define your target operating system
 
