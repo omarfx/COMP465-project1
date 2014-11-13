@@ -45,7 +45,9 @@ public:
 	}
 
 	virtual void fireMissile(float speed, Shape3D * target){
+	}
 
+	virtual void warp(int warpLoc, glm::vec3 unumEye, glm::vec3 duoEye){
 	}
 	
 };

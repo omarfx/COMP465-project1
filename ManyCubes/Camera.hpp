@@ -47,6 +47,13 @@ public:
 		return glm::lookAt(eye, at, up);
 	}
 
+	glm::vec3 getEye(glm::mat4 subPos){
+		tempTransMatrix = subPos;
+		eye = glm::vec3(tempTransMatrix[3][0] + eyeOffset[0], tempTransMatrix[3][1] + eyeOffset[1], tempTransMatrix[3][2] + eyeOffset[2]);
+		
+		return eye;
+	}
+
 
 	void update() {
 		;

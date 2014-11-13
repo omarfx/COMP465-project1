@@ -70,7 +70,7 @@ public:
 		float dist;
 		float gravForce;
 		glm::vec3 gravVec;
-		
+
 		switch (movement){
 		case YAW_LEFT:
 			rotationMatrix = glm::rotate(rotationMatrix, yRadians, yRotationAxis);
@@ -105,6 +105,16 @@ public:
 			thrustTranslate = glm::translate(glm::mat4(), glm::normalize(getOut(modelMatrix)) * thrust + gravVec);
 			break;
 		}
-		
+	}
+
+	void warp(int warpLoc, glm::vec3 unumEye, glm::vec3 duoEye){
+		switch (warpLoc){
+		case 0:
+			translationMatrix = glm::translate(glm::mat4(), unumEye);
+			break;
+		case 1:
+			translationMatrix = glm::translate(glm::mat4(), duoEye);
+			break;
+		}
 	}
 };

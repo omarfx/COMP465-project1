@@ -25,11 +25,14 @@ int curView = 0;
 /* current Timer Quantum */
 int timeQuantum = 0;
 
+int warpLoc = 0;
+
 // display state and "state strings" for title display
 // window title strings
 char baseStr[50] =    "Solar system: ";
 char fpsStr[15], viewStr[15] =    " front view";
-char titleStr [100]; 
+char tqStr[15] = " Ace";
+char titleStr [100];
 
 GLuint VAO[nModels];      // Vertex Array Objects
 GLuint buffer[nModels];
@@ -84,7 +87,7 @@ void init(void) {
 	model[Duo] = new Planet(glm::vec3(scale[Duo]), 0.002f, glm::vec3(-9000, 0, 0), "Duo", 2.0);
 	model[Primus] = new Planet(glm::vec3(scale[Primus]), 0.004f, glm::vec3(-8100, 0, 0), model[Duo], "Primus", 2.0);
 	model[Secundus] = new Planet(glm::vec3(scale[Secundus]), 0.002f, glm::vec3(-7250, 0, 0), model[Duo], "Sucundus", 2.0);
-	printf("%d Planets created \n", (nModels - 1));
+	printf("%d Planets created \n", (5));
 	
 	//create space ship
 	model[Ship] = new SpaceShip(glm::vec3(scale[Ship]), model[Ruber]);
@@ -93,15 +96,12 @@ void init(void) {
 	// create turrets
 	model[TurretUnum] = new Turret(glm::vec3(scale[TurretUnum]), glm::vec3(4000, 0, 0), model[Unum], 150);
 	model[TurretDuo] = new Turret(glm::vec3(scale[TurretDuo]), glm::vec3(-7250, 0, 0), model[Duo], 300);
-	printf("%d Turrets created \n", 1);
+	printf("%d Turrets created \n", 2);
 
 	//create missiles
 	model[MissileShip] = new ShipMissile(scale[MissileShip], model[Ship]);
 	model[MissileTurret] = new TurretMissile(scale[MissileTurret], model[Ship]);
 
-
-
-	printf("%d Ship created \n", 1);
 	//create cameras
 	frontView = new Camera(glm::vec3(0.0f, 10000.0f, 20000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Front
 	topView = new Camera(glm::vec3(0.0f, 20000.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); //Top
@@ -122,7 +122,7 @@ void updateTitle() {
 	strcpy(titleStr, baseStr);
 	strcat(titleStr, viewStr);
 	strcat(titleStr, fpsStr);
-	// printf("title string = %s \n", titleStr);
+	strcat(titleStr, tqStr);
 	glutSetWindowTitle(titleStr);
 }
 
@@ -202,15 +202,19 @@ void updateTimer(int timeQuantum) {
 	{
 	case (0) :
 		timerDelay = 40;
+		strcpy(tqStr, " Ace");
 		break;
 	case (1) :
 		timerDelay = 100;
+		strcpy(tqStr, " Novice");
 		break;
 	case (2) :
 		timerDelay = 250;
+		strcpy(tqStr, " Practice");
 		break;
 	case (3) :
 		timerDelay = 500;
+		strcpy(tqStr, " Debug");
 		break;
 	}
 }
@@ -235,6 +239,8 @@ void keyboard(unsigned char key, int x, int y) {
 		/* -- warp ship -- */
 	case 'w': case 'W':
 		printf("Warp ship!");
+		warpLoc = (warpLoc + 1) % 2;
+		model[Ship]->warp(warpLoc, unumView->getEye(modelMatrix[Unum]), duoView->getEye(modelMatrix[Duo]));
 		break;
 		/* -- fire missile -- */
 	case 'f': case 'F':
