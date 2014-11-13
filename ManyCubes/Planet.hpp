@@ -42,7 +42,8 @@ public:
 	Planet(glm::vec3 scale, float rads, glm::vec3 trans, char* name, float spin){
 		rotationMatrix = glm::mat4();  // no initial orientation
 		scaleMatrix = glm::scale(glm::mat4(), scale);
-		radians = glm::radians(rads);
+		//radians = glm::radians(rads);
+		radians = rads;
 		translationMatrix = glm::translate(glm::mat4(), trans);
 		isTheSun = false;
 		isAMoon = false;
@@ -54,8 +55,9 @@ public:
 		glm::mat4 pTransMatrix;
 		rotationMatrix = glm::mat4();  // no initial orientation
 		scaleMatrix = glm::scale(glm::mat4(), scale);
-		radians = glm::radians(rads);
-		
+		//radians = glm::radians(rads);
+		radians = rads;
+
 		translationMatrix = glm::translate(glm::mat4(), trans);
 		pTransMatrix = orbitTarget->getTransMatrix();
 		for (int i = 0; i < 3; i++){
