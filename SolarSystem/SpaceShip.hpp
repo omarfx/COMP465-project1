@@ -50,14 +50,13 @@ public:
 
 	glm::mat4 getModelMatrix() {
 
-		translationMatrix = translationMatrix * thrustTranslate;
 		modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
-		thrustTranslate = glm::mat4();
 		return(modelMatrix);
 	}
 
 	void update() {
-		
+		translationMatrix = translationMatrix * thrustTranslate;
+		thrustTranslate = glm::mat4();
 	}
 
 	void printMat4(glm::mat4 matIn){

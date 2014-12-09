@@ -13,16 +13,20 @@ in vec4 color;
 in vec3 Position;
 in vec3 Normal;
 
-out vec4 fragColor;
-
+uniform vec3 HeadLightPosition;
+uniform vec3 HeadLightIntensity;
 uniform vec3 PointLightPosition;
 uniform vec3 PointLightIntensity;
 
+uniform bool HeadLightOn;
 uniform bool PointLightOn;
 uniform bool DebugOn;
+uniform bool IsTheSun;
 
 vec3 ambientColor = vec3(1.0, 0.0, 0.0); // debug ambient red
 vec3 diffuseColor = vec3(0.0, 1.0, 0.0); // debug diffuse green
+
+out vec4 fragColor;
 
 vec3 vLight(vec3 LightPosition, vec3 LightIntensity, bool directional){
 	float ambient = 0.2f;
@@ -46,11 +50,14 @@ vec3 vLight(vec3 LightPosition, vec3 LightIntensity, bool directional){
 
 void main() {
 	vec3 tempColor = vec3(color) * 0.1f;
-	if(!PointLightOn)
-		tempColor = vec3(color);
-	if(PointLightOn)
-		tempColor += vLight(PointLightPosition, PointLightIntensity, false);
+	if(IsTheSun)
+		tempColor = vec3(1.0,1.0,0.0);
+	else{
+		if(PointLightOn)
+			tempColor += vLight(PointLightPosition, PointLightIntensity, false);
+		if(HeadLightOn)
+			tempColor += vLight(HeadLightPosition, HeadLightIntensity, true);
+	}
 	
 	fragColor = vec4(tempColor, 1.0);
-	//fragColor = color;
 }

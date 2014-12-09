@@ -63,12 +63,21 @@ glm::mat3 NormalMatrix;
 GLuint debugSetOn; //handle for debug bool
 int debugLightOn = 0; //0 = off 1 = on
 
+GLuint isTheSun;
+
 //Point Light vars
 GLuint pointLightSetOn; // handle for bool in shader
 GLuint pointLightLoc; //handle
 GLuint pointLightIntensity; //handle
 int pointLightOn = 1; //0 = off 1 = on
 glm::vec3 PointLightIntensity = glm::vec3(1.0, 1.0, 1.0);//RBG values of the light
+
+//Head Light vars
+GLuint headLightSetOn; // handle for bool in shader
+GLuint headLightLoc; //handle
+GLuint headLightIntensity; //handle
+int headLightOn = 0; //0 = off 1 = on
+glm::vec3 HeadLightIntensity = glm::vec3(1.0, 1.0, 1.0);//RBG values of the light
 
 glm::vec3 scale[nModels];       // set in init()
 
@@ -105,8 +114,13 @@ void init(void) {
 	pointLightSetOn = glGetUniformLocation(shaderProgram, "PointLightOn");
 	pointLightLoc = glGetUniformLocation(shaderProgram, "PointLightPosition");
 	pointLightIntensity = glGetUniformLocation(shaderProgram, "PointLightIntensity");
+
+	headLightSetOn = glGetUniformLocation(shaderProgram, "HeadLightOn");
+	headLightLoc = glGetUniformLocation(shaderProgram, "HeadLightPosition");
+	headLightIntensity = glGetUniformLocation(shaderProgram, "HeadLightIntensity");
 	
 	debugSetOn = glGetUniformLocation(shaderProgram, "DebugOn");
+	isTheSun = glGetUniformLocation(shaderProgram, "IsTheSun");
 
 	// load texture
 	texture = loadRawTexture(texture, fileName, width, height);
@@ -208,6 +222,9 @@ void printMat4(glm::mat4 matIn){
 
 void display(void) {
 	glm::vec3 RuberPos;
+	glm::vec3 ShipPos;
+	int isSun;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// update model matrix, set MVP, draw
@@ -216,9 +233,15 @@ void display(void) {
 		modelMatrix[i] = model[i]->getModelMatrix();
 	}
 	camUpdate();
-
+	ShipPos = getPosition((viewMatrix * modelMatrix[Ship]));
 	RuberPos = getPosition((viewMatrix * modelMatrix[Ruber]));
 	for (int i = 0; i < nModels; i++) {
+		
+		if (i == Ruber)
+			isSun = 1;
+		else
+			isSun = 0;
+
 		ModelView = viewMatrix * modelMatrix[i];
 		NormalMatrix = glm::mat3(ModelView);
 		ModelViewProjectionMatrix = projectionMatrix * ModelView;
@@ -229,9 +252,14 @@ void display(void) {
 		
 		glUniform1i(pointLightSetOn, pointLightOn);
 		glUniform3fv(pointLightLoc, 1, glm::value_ptr(RuberPos)); // set location of PointLight
-		glUniform3fv(pointLightIntensity, 1, glm::value_ptr(PointLightIntensity)); //set RGB values in shader
+		glUniform3fv(pointLightIntensity, 1, glm::value_ptr(PointLightIntensity)); //sets RGB values in shader
+
+		glUniform1i(headLightSetOn, headLightOn);
+		glUniform3fv(headLightLoc, 1, glm::value_ptr(RuberPos)); // set location of HeadLight
+		glUniform3fv(headLightIntensity, 1, glm::value_ptr(HeadLightIntensity)); //sets RGB values in shader
 
 		glUniform1i(debugSetOn, debugLightOn);
+		glUniform1i(isTheSun, isSun);
 		
 		glBindVertexArray(VAO[i]);
 
@@ -324,6 +352,9 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 	case 'd': case 'D':
 		debugLightOn = (debugLightOn + 1) % 2;
+		break;
+	case 'h': case 'H':
+		headLightOn = (headLightOn + 1) % 2;
 		break;
 	}
 	/* update title on page base on view */
