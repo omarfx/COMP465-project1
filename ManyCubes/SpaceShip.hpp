@@ -60,20 +60,6 @@ public:
 		
 	}
 
-	void printMat4(glm::mat4 matIn){
-
-		int i = 0;
-		int j = 0;
-
-		printf("\n");
-		for (; i < 4; i++){
-			for (j = 0; j < 4; j++)
-				printf("%d   ", matIn[j][i]);
-			printf("\n");
-		}
-		printf("\n");
-	}
-
 	void move(int movement){
 		float dist;
 		float gravForce;

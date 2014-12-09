@@ -50,10 +50,25 @@ GLuint texture, Texture, showTexture;
 char * vertexShaderFile = "simpleVertex.glsl";
 char * fragmentShaderFile = "simpleFragment.glsl";
 GLuint MVP ;  // Model View Projection matrix's handle
+GLuint MV;  //Model Views matrix handle
+GLuint NM; //NormalMatrix's matrix handle
 glm::mat4 projectionMatrix;		// set in reshape()
 glm::mat4 modelMatrix[nModels];		// set in display
 glm::mat4 viewMatrix;			// set in keyboard()
 glm::mat4 ModelViewProjectionMatrix; // set in display();
+glm::mat4 ModelView; //set in display()
+glm::mat3 NormalMatrix;
+
+//debug Light vars
+GLuint debugSetOn; //handle for debug bool
+int debugLightOn = 0; //0 = off 1 = on
+
+//Point Light vars
+GLuint pointLightSetOn; // handle for bool in shader
+GLuint pointLightLoc; //handle
+GLuint pointLightIntensity; //handle
+int pointLightOn = 1; //0 = off 1 = on
+glm::vec3 PointLightIntensity = glm::vec3(1.0, 1.0, 1.0);//RBG values of the light
 
 glm::vec3 scale[nModels];       // set in init()
 
@@ -84,6 +99,14 @@ void init(void) {
 	}
 
 	MVP = glGetUniformLocation(shaderProgram, "ModelViewProjection");
+	MV = glGetUniformLocation(shaderProgram, "ModelView");
+	NM = glGetUniformLocation(shaderProgram, "NormalMatrix");
+	
+	pointLightSetOn = glGetUniformLocation(shaderProgram, "PointLightOn");
+	pointLightLoc = glGetUniformLocation(shaderProgram, "PointLightPosition");
+	pointLightIntensity = glGetUniformLocation(shaderProgram, "PointLightIntensity");
+	
+	debugSetOn = glGetUniformLocation(shaderProgram, "DebugOn");
 
 	// load texture
 	texture = loadRawTexture(texture, fileName, width, height);
@@ -184,7 +207,7 @@ void printMat4(glm::mat4 matIn){
 }
 
 void display(void) {
-
+	glm::vec3 RuberPos;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// update model matrix, set MVP, draw
@@ -193,9 +216,22 @@ void display(void) {
 		modelMatrix[i] = model[i]->getModelMatrix();
 	}
 	camUpdate();
+
+	RuberPos = getPosition((viewMatrix * modelMatrix[Ruber]));
 	for (int i = 0; i < nModels; i++) {
-		ModelViewProjectionMatrix = projectionMatrix * viewMatrix * modelMatrix[i]; 
-		glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix)); 
+		ModelView = viewMatrix * modelMatrix[i];
+		NormalMatrix = glm::mat3(ModelView);
+		ModelViewProjectionMatrix = projectionMatrix * ModelView;
+
+		glUniformMatrix4fv(MV, 1, GL_FALSE, glm::value_ptr(ModelView));
+		glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix));
+		glUniformMatrix3fv(NM, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+		
+		glUniform1i(pointLightSetOn, pointLightOn);
+		glUniform3fv(pointLightLoc, 1, glm::value_ptr(RuberPos)); // set location of PointLight
+		glUniform3fv(pointLightIntensity, 1, glm::value_ptr(PointLightIntensity)); //set RGB values in shader
+
+		glUniform1i(debugSetOn, debugLightOn);
 		
 		glBindVertexArray(VAO[i]);
 
@@ -248,7 +284,7 @@ void update (int i) {
 // Quit or set the view
 // handle basic keyboard functions
 void keyboard(unsigned char key, int x, int y) {
-	
+
 	switch (key) {
 		/* -- quit -- */
 	case 033: case 'q':  case 'Q':
@@ -282,6 +318,12 @@ void keyboard(unsigned char key, int x, int y) {
 		/* -- next ship speed -- */
 	case 's': case 'S':
 		printf("Change ship speed!");
+		break;
+	case 'p': case 'P':
+		pointLightOn = (pointLightOn + 1) % 2;
+		break;
+	case 'd': case 'D':
+		debugLightOn = (debugLightOn + 1) % 2;
 		break;
 	}
 	/* update title on page base on view */
