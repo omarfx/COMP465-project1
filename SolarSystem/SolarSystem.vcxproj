@@ -23,6 +23,10 @@
     <ClInclude Include="Turret.hpp" />
     <ClInclude Include="TurretMissile.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="simpleFragment.glsl" />
+    <None Include="simpleVertex.glsl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{285A1D7C-F95D-43B3-83F3-6E1EC837EE5A}</ProjectGuid>
     <RootNamespace>ManyCubes</RootNamespace>

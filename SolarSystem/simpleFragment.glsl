@@ -9,6 +9,7 @@ Mike Barnes
 
 # version 330 core
 
+in vec2 texCoord;
 in vec4 color;
 in vec3 Position;
 in vec3 Normal;
@@ -18,6 +19,7 @@ uniform vec3 HeadLightIntensity;
 uniform vec3 PointLightPosition;
 uniform vec3 PointLightIntensity;
 
+uniform bool IsTexture;
 uniform bool HeadLightOn;
 uniform bool PointLightOn;
 uniform bool DebugOn;

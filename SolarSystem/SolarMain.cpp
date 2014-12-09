@@ -13,6 +13,11 @@
 # define __OURINCLUDES__
 # endif
 
+
+//Textures
+int width = 640, height = 487;   // set texture's width and height values here
+char * fileName = "starField.raw";  // set the texture file's name here
+
 //Cameras
 Camera * topView;
 Camera * unumView;
@@ -25,8 +30,7 @@ Shape3D * model[nModels]; // objects for shapes
 char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri", "turret.tri", "turret.tri", "missile.tri", "missile.tri"}; // name of planet model file
 const int nVertices[nModels] = {480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3, 492 * 3, 492 * 3, 384 * 3, 384 * 3};
 float modelBR[nModels]; // modelFile's bounding radius
-int width = 256, height = 363;   // set texture's width and height values here
-char * fileName = "starField.raw";  // set the texture file's name here
+
 
 /* current camera view */
 int curView = 0;
@@ -46,7 +50,7 @@ char titleStr [100];
 GLuint VAO[nModels];      // Vertex Array Objects
 GLuint buffer[nModels];
 GLuint shaderProgram; 
-GLuint texture, Texture, showTexture;
+GLuint texture, Texture, showTexture; // texture id and shader handle
 char * vertexShaderFile = "simpleVertex.glsl";
 char * fragmentShaderFile = "simpleFragment.glsl";
 GLuint MVP ;  // Model View Projection matrix's handle
@@ -107,6 +111,8 @@ void init(void) {
 		scale[i] = glm::vec3(modelSize[i] * 1.0f / modelBR[i]);
 	}
 
+	//Uniforms
+	showTexture = glGetUniformLocation(shaderProgram, "IsTexture");
 	MVP = glGetUniformLocation(shaderProgram, "ModelViewProjection");
 	MV = glGetUniformLocation(shaderProgram, "ModelView");
 	NM = glGetUniformLocation(shaderProgram, "NormalMatrix");
@@ -132,6 +138,7 @@ void init(void) {
 		printf("Texture in file %s NOT LOADED !!! \n");
 
 	// set render state values
+	glCullFace(GL_BACK);  // show only front faces
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
