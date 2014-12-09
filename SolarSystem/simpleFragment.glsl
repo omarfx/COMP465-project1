@@ -24,6 +24,7 @@ uniform bool HeadLightOn;
 uniform bool PointLightOn;
 uniform bool DebugOn;
 uniform bool IsTheSun;
+uniform sampler2D Texture;
 
 vec3 ambientColor = vec3(1.0, 0.0, 0.0); // debug ambient red
 vec3 diffuseColor = vec3(0.0, 1.0, 0.0); // debug diffuse green
@@ -60,6 +61,8 @@ void main() {
 		if(HeadLightOn)
 			tempColor += vLight(HeadLightPosition, HeadLightIntensity, true);
 	}
-	
-	fragColor = vec4(tempColor, 1.0);
+	if (IsTexture)   // use texture on surface
+		fragColor = texture(Texture, texCoord);
+      else         // use color for surface
+		fragColor = vec4(tempColor, 1.0);
 }
