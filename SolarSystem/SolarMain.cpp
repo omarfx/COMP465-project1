@@ -25,10 +25,10 @@ Camera * frontView;
 Camera * duoView;
 ShipCamera * shipCam;
 // Shapes
-const int nModels = 11;
+const int nModels = 10;
 Shape3D * model[nModels]; // objects for shapes
-char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri", "turret.tri", "turret.tri", "missile.tri", "missile.tri", "cube.tri"}; // name of planet model file
-const int nVertices[nModels] = {480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3, 492 * 3, 492 * 3, 384 * 3, 384 * 3, 12 * 3};
+char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri", "turret.tri", "turret.tri", "missile.tri", "missile.tri"}; // name of planet model file
+const int nVertices[nModels] = {480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3, 492 * 3, 492 * 3, 384 * 3, 384 * 3};
 float modelBR[nModels]; // modelFile's bounding radius
 
 
@@ -69,6 +69,12 @@ int debugLightOn = 0; //0 = off 1 = on
 
 GLuint isTheSun;
 
+//Ambient Light vars
+GLuint ambientSetOn;
+GLuint ambientLightIntensity;
+int ambientOn = 0;
+glm::vec3 AmbientLightIntensity = glm::vec3(0.5, 0.5, 0.5);//RBG values of the light
+
 //Point Light vars
 GLuint pointLightSetOn; // handle for bool in shader
 GLuint pointLightLoc; //handle
@@ -85,7 +91,7 @@ glm::vec3 HeadLightIntensity = glm::vec3(1.0, 1.0, 1.0);//RBG values of the ligh
 
 glm::vec3 scale[nModels];       // set in init()
 
-float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f, 300.0f, 600.0f, 25.0f, 25.0f, 20000.0f};   // size of model
+float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f, 300.0f, 600.0f, 25.0f, 25.0f};   // size of model
 
 GLuint vPosition[nModels], vColor[nModels], vNormal[nModels];   // vPosition, vColor, vNormal handles for models
 
@@ -125,6 +131,9 @@ void init(void) {
 	headLightLoc = glGetUniformLocation(shaderProgram, "HeadLightPosition");
 	headLightIntensity = glGetUniformLocation(shaderProgram, "HeadLightIntensity");
 	
+	ambientLightIntensity = glGetUniformLocation(shaderProgram, "AmbientLightIntensity");
+	ambientSetOn = glGetUniformLocation(shaderProgram, "AmbientOn");
+
 	debugSetOn = glGetUniformLocation(shaderProgram, "DebugOn");
 	isTheSun = glGetUniformLocation(shaderProgram, "IsTheSun");
 
@@ -269,6 +278,9 @@ void display(void) {
 		glUniform3fv(headLightLoc, 1, glm::value_ptr(RuberPos)); // set location of HeadLight
 		glUniform3fv(headLightIntensity, 1, glm::value_ptr(HeadLightIntensity)); //sets RGB values in shader
 
+		glUniform1i(ambientSetOn, ambientOn);
+		glUniform3fv(ambientLightIntensity, 1, glm::value_ptr(AmbientLightIntensity));
+
 		glUniform1i(debugSetOn, debugLightOn);
 		glUniform1i(isTheSun, isSun);
 		
@@ -366,6 +378,9 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 	case 'h': case 'H':
 		headLightOn = (headLightOn + 1) % 2;
+		break;
+	case 'a': case 'A':
+		ambientOn = (ambientOn + 1) % 2;
 		break;
 	}
 	/* update title on page base on view */
