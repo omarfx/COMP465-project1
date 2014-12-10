@@ -31,7 +31,8 @@ void main() {
 	Normal = normalize(NormalMatrix * vNormal);
 	if (IsTexture)  {  // texture is used, not color
 		texCoord = vTexCoord;
-		color = vec4(0,0,0,0); }
+		color = vec4(0,0,0,0);
+	}
     else {   // color is used, not texture
 		texCoord =vec2(0, 0);
 		color = vColor;
