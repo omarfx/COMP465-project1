@@ -16,6 +16,7 @@
 # define TurretDuo 7
 # define MissileShip 8
 # define MissileTurret 9
+# define Star 10
 
 #define YAW_RIGHT 0
 #define YAW_LEFT 1

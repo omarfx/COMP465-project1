@@ -31,6 +31,11 @@
 # define __PLANET__
 # endif
 
+# ifndef __STARFIELD__
+# include "Starfield.hpp"
+# define __STARFIELD__
+# endif
+
 # ifndef __SHIP__
 # include "SpaceShip.hpp"
 # define __SHIP__

@@ -14,12 +14,14 @@
     <ClCompile Include="SolarMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Defines.hpp" />
     <ClInclude Include="OurIncludes.hpp" />
     <ClInclude Include="Planet.hpp" />
     <ClInclude Include="Shape3D.hpp" />
     <ClInclude Include="ShipCamera.hpp" />
     <ClInclude Include="ShipMissile.hpp" />
     <ClInclude Include="SpaceShip.hpp" />
+    <ClInclude Include="Starfield.hpp" />
     <ClInclude Include="Turret.hpp" />
     <ClInclude Include="TurretMissile.hpp" />
   </ItemGroup>

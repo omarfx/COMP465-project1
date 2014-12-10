@@ -44,6 +44,12 @@
     <ClInclude Include="TurretMissile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Starfield.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Defines.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="simpleVertex.glsl">
