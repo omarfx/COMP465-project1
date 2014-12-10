@@ -65,6 +65,9 @@ glm::mat4 viewMatrix;			// set in keyboard()
 glm::mat4 ModelViewProjectionMatrix; // set in display();
 glm::mat4 ModelView; //set in display()
 glm::mat3 NormalMatrix;
+glm::mat4 starRotation;
+glm::mat4 starTranslate;
+
 
 //debug Light vars
 GLuint debugSetOn; //handle for debug bool
@@ -304,6 +307,41 @@ void display(void) {
 	glUniform1i(showTexture, isTexture);
 
 	ModelViewProjectionMatrix = projectionMatrix * viewMatrix;
+	glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix));
+
+	glDrawElements(GL_TRIANGLES, starVertices, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+	starRotation = glm::rotate(glm::mat4(), 1.57f, glm::vec3(0.0, 1.0, 0.0));
+
+	ModelViewProjectionMatrix = projectionMatrix * viewMatrix * starRotation;
+	glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix));
+
+	glDrawElements(GL_TRIANGLES, starVertices, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+	starRotation = glm::rotate(glm::mat4(), -1.57f, glm::vec3(0.0, 1.0, 0.0));
+
+	ModelViewProjectionMatrix = projectionMatrix * viewMatrix * starRotation;
+	glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix));
+
+	glDrawElements(GL_TRIANGLES, starVertices, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+	starRotation = glm::rotate(glm::mat4(), 3.14159265f, glm::vec3(0.0, 1.0, 0.0));
+
+	ModelViewProjectionMatrix = projectionMatrix * viewMatrix * starRotation;
+	glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix));
+
+	glDrawElements(GL_TRIANGLES, starVertices, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+	starRotation = glm::rotate(glm::mat4(), 1.57f, glm::vec3(1.0, 0.0, 0.0));
+
+	ModelViewProjectionMatrix = projectionMatrix * viewMatrix * starRotation;
+	glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix));
+
+	glDrawElements(GL_TRIANGLES, starVertices, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+	starRotation = glm::rotate(glm::mat4(), -1.57f, glm::vec3(1.0, 0.0, 0.0));
+
+	ModelViewProjectionMatrix = projectionMatrix * viewMatrix * starRotation;
 	glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix));
 
 	glDrawElements(GL_TRIANGLES, starVertices, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
