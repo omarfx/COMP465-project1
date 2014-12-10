@@ -67,21 +67,18 @@ glm::vec3 eye, at, up;
 
 // coordinates for "indexed model"
 static const GLfloat point[] = {
-  -128.0f, -128.0f,  181.0f, 1.0f,  // 0 front left bottom 
-   128.0f, -128.0f,  181.0f, 1.0f,  // 1 front right bottom
-   128.0f, -128.0f, -181.0f, 1.0f,  // 2 back right bottom
-  -128.0f, -128.0f, -181.0f, 1.0f,  // 3 back left bottom
-   0.0f,  128.0f,  0.0f, 1.0f}; // 4 apex
+	-300.0f, 300.0f, 300.0f, 1.0f,
+	-300.0f, -300.0f, 300.0f, 1.0f,
+	300.0f, -300.0f, 300.0f, 1.0f,
+	300.0f, 300.0f, 300.0f, 1.0f,
+	300.0f, -300.0f, 300.0f, 1.0f,
+	-300.0f, 300.0f, 300.0f, 1.0f, }; // 4 apex
   
 
 // indexes to reuse vertex values
-static const unsigned int indices[] = { // 6 faces, 3 vertices per face
-  0, 1, 4, // Front Face 
-  1, 2, 4,   // Right Face 
-  2, 3, 4,  // Back Face 
-  3, 0, 4,  // Left Face 
-  3, 1, 0,  // Front Bottom Face 
-  3, 2, 1}; // Back Bottom Face 
+static const unsigned int indices[] = { // 12 triangles, 3 vertices per triangle
+	3, 0, 1,
+	3, 1, 2};
   
 
 // vertex normals averaged from shared surface normals
@@ -93,8 +90,7 @@ static const GLfloat texCoords[] = {
   0.0f, 0.0f,     // 0
   1.0f, 0.0f,     // 1
   1.0f, 1.0f,     // 2
-  0.0f, 1.0f,     // 3
-  0.5f, 0.5f };   // 4 apex
+  0.0f, 1.0f};   // 4 apex
 
 /*
 // Given a unitNormal, set the 3 coordinates in the normal array 
@@ -132,10 +128,12 @@ void init (void) {
   //  initialize a buffer object
   glEnableVertexAttribArray(vbo[Pyramid]);
   glBindBuffer( GL_ARRAY_BUFFER, vbo[Pyramid] );
+
   //glBufferData( GL_ARRAY_BUFFER, sizeof(point) + sizeof(texCoords) + sizeof(normal), NULL, GL_STATIC_DRAW );
   glBufferData( GL_ARRAY_BUFFER, sizeof(point) + sizeof(texCoords), NULL, GL_STATIC_DRAW );
   glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point), point );
   glBufferSubData( GL_ARRAY_BUFFER, sizeof(point), sizeof(texCoords), texCoords);
+
  // glBufferSubData( GL_ARRAY_BUFFER, sizeof(point) + sizeof(texCoords), sizeof(normal), normal );
 
   // set up vertex arrays (after shaders are loaded)
@@ -205,7 +203,7 @@ void display(void) {
   glUniform1f(showTexture, Pyramid);  // use texture
   setMVP(Pyramid);
   glBindVertexArray(vao[Pyramid]);
-  // glBindBuffer( GL_ARRAY_BUFFER, vbo[Pyramid] );
+   glBindBuffer( GL_ARRAY_BUFFER, vbo[Pyramid] );
   // need to bind buffers as well as VAO for GL_ELEMENT_ARRAY_BUFFER
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
   glDrawElements(GL_TRIANGLES, pyramidVertices, GL_UNSIGNED_INT, BUFFER_OFFSET(0));

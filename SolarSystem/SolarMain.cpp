@@ -24,13 +24,14 @@ Camera * unumView;
 Camera * frontView;
 Camera * duoView;
 ShipCamera * shipCam;
-// Shapes
-const int nModels = 11;
-Shape3D * model[nModels]; // objects for shapes
-char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri", "turret.tri", "turret.tri", "missile.tri", "missile.tri", "cube.tri"}; // name of planet model file
-const int nVertices[nModels] = {480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3, 492 * 3, 492 * 3, 384 * 3, 384 * 3, 12 * 3};
-float modelBR[nModels]; // modelFile's bounding radius
 
+// Shapes
+const int nModels = 10;
+Shape3D * model[nModels]; // objects for shapes
+char * modelFile[nModels] = { "planet.tri", "planet.tri", "planet.tri", "planet.tri", "planet.tri", "ship.tri", "turret.tri", "turret.tri", "missile.tri", "missile.tri"}; // name of planet model file
+const int nVertices[nModels] = {480 * 3, 480 * 3, 480 * 3, 480 * 3, 480 * 3, 515 * 3, 492 * 3, 492 * 3, 384 * 3, 384 * 3};
+float modelBR[nModels]; // modelFile's bounding radius
+const GLuint starVertices = 6;
 
 /* current camera view */
 int curView = 0;
@@ -47,9 +48,11 @@ char fpsStr[15], viewStr[15] =    " front view";
 char tqStr[15] = " Ace";
 char titleStr [100];
 
-GLuint VAO[nModels];      // Vertex Array Objects
-GLuint buffer[nModels];
-GLuint shaderProgram; 
+GLuint VAO[nModels+1];      // Vertex Array Objects
+GLuint buffer[nModels+1];
+GLuint shaderProgram;
+GLuint ibo;
+GLuint vTexCoord;
 GLuint texture, Texture, showTexture; // texture id and shader handle
 char * vertexShaderFile = "simpleVertex.glsl";
 char * fragmentShaderFile = "simpleFragment.glsl";
@@ -85,7 +88,7 @@ glm::vec3 HeadLightIntensity = glm::vec3(1.0, 1.0, 1.0);//RBG values of the ligh
 
 glm::vec3 scale[nModels];       // set in init()
 
-float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f, 300.0f, 600.0f, 25.0f, 25.0f, 20000.0f};   // size of model
+float modelSize[nModels] = { 2000.0f, 200.0f, 400.0f, 100.0f, 150.0f, 100.0f, 300.0f, 600.0f, 25.0f, 25.0f};   // size of model
 
 GLuint vPosition[nModels], vColor[nModels], vNormal[nModels];   // vPosition, vColor, vNormal handles for models
 
@@ -95,14 +98,33 @@ glm::mat4 rotation;
 int timerDelay = 40, frameCount = 0;  // A delay of 40 milliseconds is 25 updates / second
 double currentTime, lastTime, timeInterval; 
 
+static const GLfloat point[] = {
+	-20000.0f,  20000.0f, -20000.0f, 1.0f, 
+	-20000.0f, -20000.0f, -20000.0f, 1.0f,  
+	 20000.0f, -20000.0f, -20000.0f, 1.0f,  
+	 20000.0f,  20000.0f, -20000.0f, 1.0f,
+	 20000.0f, -20000.0f, -20000.0f, 1.0f,
+	 -20000.0f, 20000.0f, -20000.0f, 1.0f,
+}; 
+
+static const unsigned int indices[] = { // 12 triangles, 3 vertices per triangle
+	3, 0, 1,
+	3, 1, 2  
+}; 
+
+static const GLfloat texCoords[] = {
+	0.0f, 0.0f,     // 0
+	1.0f, 0.0f,     // 1
+	1.0f, 1.0f,     // 2
+	0.0f, 1.0f };
 
 void init(void) {
 	shaderProgram = loadShaders(vertexShaderFile, fragmentShaderFile);
 	glUseProgram(shaderProgram);
 
 	// generate VAOs and VBOs
-	glGenVertexArrays(nModels, VAO);
-	glGenBuffers(nModels, buffer);
+	glGenVertexArrays(nModels+1, VAO);
+	glGenBuffers(nModels+1, buffer);
 	// load the buffers from the model files
 	for (int i = 0; i < nModels; i++) {
 		modelBR[i] = loadModelBuffer(modelFile[i], nVertices[i], VAO[i], buffer[i], shaderProgram,
@@ -111,8 +133,35 @@ void init(void) {
 		scale[i] = glm::vec3(modelSize[i] * 1.0f / modelBR[i]);
 	}
 
+	// set up the indices buffer
+	glGenBuffers(1, &ibo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// set up the indexed pyramid vertex attributes
+	glBindVertexArray(buffer[Star]);
+
+	//  initialize a buffer object
+	glEnableVertexAttribArray(buffer[Star]);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer[Star]);
+
+	//glBufferData( GL_ARRAY_BUFFER, sizeof(point) + sizeof(texCoords) + sizeof(normal), NULL, GL_STATIC_DRAW );
+	glBufferData(GL_ARRAY_BUFFER, sizeof(point) + sizeof(texCoords), NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(point), point);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(point), sizeof(texCoords), texCoords);
+
+	// set up vertex arrays (after shaders are loaded)
+	vPosition[Star] = glGetAttribLocation(shaderProgram, "vPosition");
+	glVertexAttribPointer(vPosition[Star], 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(vPosition[Star]);
+
+	vTexCoord = glGetAttribLocation(shaderProgram, "vTexCoord");
+	glVertexAttribPointer(vTexCoord, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(sizeof(point)));
+	glEnableVertexAttribArray(vTexCoord);
+
+
 	//Uniforms
-	showTexture = glGetUniformLocation(shaderProgram, "IsTexture");
+	
 	MVP = glGetUniformLocation(shaderProgram, "ModelViewProjection");
 	MV = glGetUniformLocation(shaderProgram, "ModelView");
 	NM = glGetUniformLocation(shaderProgram, "NormalMatrix");
@@ -128,6 +177,8 @@ void init(void) {
 	debugSetOn = glGetUniformLocation(shaderProgram, "DebugOn");
 	isTheSun = glGetUniformLocation(shaderProgram, "IsTheSun");
 
+	showTexture = glGetUniformLocation(shaderProgram, "IsTexture");
+
 	// load texture
 	texture = loadRawTexture(texture, fileName, width, height);
 	if (texture != 0) {
@@ -138,7 +189,7 @@ void init(void) {
 		printf("Texture in file %s NOT LOADED !!! \n");
 
 	// set render state values
-	glCullFace(GL_BACK);  // show only front faces
+	//glCullFace(GL_BACK);  // show only front faces
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -154,10 +205,6 @@ void init(void) {
 	//create space ship
 	model[Ship] = new SpaceShip(glm::vec3(scale[Ship]), model[Ruber]);
 	printf("%d Ship created \n", 1);
-
-	//create starfield
-	model[Star] = new Starfield(glm::vec3(scale[Star]), glm::vec3(0, 0, 0));
-	printf("%d starfield created \n", 1);
 
 	// create turrets
 	model[TurretUnum] = new Turret(glm::vec3(scale[TurretUnum]), glm::vec3(4000, 0, 0), model[Unum], 150);
@@ -235,10 +282,25 @@ void display(void) {
 	glm::vec3 RuberPos;
 	glm::vec3 ShipPos;
 	int isSun;
+	int isTexture;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// update model matrix, set MVP, draw
+	isTexture = 1;
+
+	glBindVertexArray(VAO[Star]);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer[Star]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	glUniform1i(showTexture, isTexture);
+
+	ModelViewProjectionMatrix = projectionMatrix * viewMatrix;
+	glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(ModelViewProjectionMatrix));
+
+	glDrawElements(GL_TRIANGLES, starVertices, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+
+	isTexture = 0;
+	glUniform1i(showTexture, isTexture);
 
 	for (int i = 0; i < nModels; i++) {
 		modelMatrix[i] = model[i]->getModelMatrix();
@@ -252,6 +314,7 @@ void display(void) {
 			isSun = 1;
 		else
 			isSun = 0;
+
 
 		ModelView = viewMatrix * modelMatrix[i];
 		NormalMatrix = glm::mat3(ModelView);
@@ -271,7 +334,8 @@ void display(void) {
 
 		glUniform1i(debugSetOn, debugLightOn);
 		glUniform1i(isTheSun, isSun);
-		
+		 
+
 		glBindVertexArray(VAO[i]);
 
 		glDrawArrays(GL_TRIANGLES, 0, nVertices[i]);

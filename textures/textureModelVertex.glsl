@@ -28,7 +28,8 @@ void main(void) {
   vs_normal = NormalMatrix * vNormal; 
   if (IsTexture)  {  // texture is used, not color
       vs_texCoord = vTexCoord;
-      vs_color = vec4(0,0,0,0); }
+      vs_color = vec4(0,0,0,0)
+	  ; }
     else { // color is used, not texture
       vs_texCoord =vec2(0, 0);
       vs_color = vColor; }
